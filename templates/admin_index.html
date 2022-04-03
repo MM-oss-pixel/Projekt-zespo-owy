@@ -5,6 +5,16 @@
     <title>admin_panel</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+    
     <h1>ADMIN PANEL</h1>
     <div>
         <h2 class="lh2">USERS</h2>
@@ -30,17 +40,17 @@
         <div class="separate1">
       <div class="ramka4form">
 
-      <p>{{record[0]}}, {{record[1]}}, {{record[2]}}, {{record[3]}} ,{{record[4]}} ,{{record[5]}}, {{record[6]}}</p>
+      <p>{{record.id}}, {{record.nickname}}, {{record.email}}, {{record.password}} ,{{record.age}} ,{{record.sex}}, {{record.is_admin}}</p>
                 
       </div>
-        <form action="/admin_user_edit" method="post">
-            <input type="hidden" value="{{record[0]}}" name="id">
-            <input type="hidden" value="{{record[1]}}" name="nickname">
-            <input type="hidden" value="{{record[2]}}" name="email">
-            <input type="hidden" value="{{record[3]}}" name="password">
-            <input type="hidden" value="{{record[4]}}" name="age">
-            <input type="hidden" value="{{record[5]}}" name="sex">
-            <input type="hidden" value="{{record[6]}}" name="is_admin">
+        <form action="/admin_search_user" method="post">
+            <input type="hidden" value="{{record.id}}" name="id">
+            <input type="hidden" value="{{record.nickname}}" name="nickname">
+            <input type="hidden" value="{{record.email}}" name="email">
+            <input type="hidden" value="{{record.password}}" name="password">
+            <input type="hidden" value="{{record.age}}" name="age">
+            <input type="hidden" value="{{record.sex}}" name="sex">
+            <input type="hidden" value="{{record.is_admin}}" name="is_admin">
             <input class="edit" type="submit" value="&#9998;">
         </form>
         </div>
@@ -53,31 +63,32 @@
         <div class="separate2">
       <div class="ramka5form">
 
-      <p>{{record[0]}}, {{record[1]}}, {{record[2]}}, {{record[3]}}</p>
+      <p>{{record.id}}, {{record.user_id}}, {{record.how_many_reports}}</p>
+          <span></span><p>{{record.content}}</p>
                 
       </div>
       <div class="options2">
                 <form action="/admin_comment_delete" method="post">
-                    <input type="hidden" value="{{record[0]}}" name="id">
-                    <input type="hidden" value="{{record[1]}}" name="nickname">
-                    <input type="hidden" value="{{record[2]}}" name="content">
-                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
                     <input class="delete" type="submit" value="&#10060;">
                 </form>
               
-              <form action="/admin_comment_ban" method="post">
-                    <input type="hidden" value="{{record[0]}}" name="id">
-                    <input type="hidden" value="{{record[1]}}" name="nickname">
-                    <input type="hidden" value="{{record[2]}}" name="content">
-                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+              <form action="/admin_comment_delete_and_ban" method="post">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
                     <input class="ban" type="submit" value="&#128711;">
                 </form>
               
-              <form action="/admin_comment_delete_and_ban" method="post">
-                    <input type="hidden" value="{{record[0]}}" name="id">
-                    <input type="hidden" value="{{record[1]}}" name="nickname">
-                    <input type="hidden" value="{{record[2]}}" name="content">
-                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+              <form action="/admin_comment_save" method="post">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
                     <input class="save" type="submit" value="&#10003;">
                 </form>
           </div>
@@ -225,11 +236,22 @@
             margin: 0;
             float: left;
         }
+        .save
+        {
+            background: green;
+        }
         .ramka5form
         {
             height: 15vh;
             width: 90%;
             overflow-y: auto;
+            word-wrap: break-word;
+        }
+        .flashes
+        {
+            color: red;
+            font-size: 150%;
+            
         }
     
     </style>

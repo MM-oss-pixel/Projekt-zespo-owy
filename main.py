@@ -2,6 +2,7 @@ from lib2to3.pgen2 import token
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import  desc
 from flask_login import UserMixin, LoginManager, login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
@@ -43,13 +44,140 @@ class User(UserMixin, db.Model):
         self.sex= sex
         self.is_admin=is_admin
 
-
-
 # ---------------------------------------------                     admin_panel
 
-@app.route("/admin_index")
-def admin_index():
-    return render_template("admin_index.html")
+# @app.route("/admin_index")
+# # @login_required
+# def admin_index():
+#     first_100_users=User.query.limit(100).all()
+#     x=[]
+#     for i in first_100_users:
+#         x.append(i)
+#     records=[]
+#     records.append(x)
+#
+#     reported_comments=Comments.query.filter(Comments.how_many_reports>0).order_by(desc(Comments.how_many_reports)).limit(100).all()
+#     x=[]
+#     for i in reported_comments:
+#         x.append(i)
+#     records.append(x)
+#     return render_template("admin_index.html",records=records)
+#
+#
+# @app.route("/admin_search_user",methods = ['GET','POST'])
+# # @login_required
+# def admin_search_user():
+#     if (request.method == 'POST'):
+#         nickname=request.form.get('nickname')
+#         us=User.query.filter(User.nickname==nickname).first()
+#         if (len(nickname) == 0 or us==None):
+#             flash("podany user nie istnieje!")
+#             return redirect("/admin_index")
+#         records=[]
+#         x=[]
+#         x.append(us)
+#         records.append(x)
+#
+#         comments_of_user=Comments.query.filter(Comments.user_id==us.id).order_by(desc(Comments.how_many_reports)).limit(100).all()
+#         x=[]
+#         for i in comments_of_user:
+#             x.append(i)
+#         records.append(x)
+#     return render_template("admin_check_user.html",records=records)
+#
+# @app.route("/admin_comment_delete",methods = ['GET','POST'])
+# # @login_required
+# def admin_comment_delete():
+#     if (request.method == 'POST'):
+#         mes_id=request.form.get('id')
+#         com=Comments.query.filter(Comments.id==mes_id).first()
+#
+#         db.session.delete(com)
+#         db.session.commit()
+#         return redirect("admin_index")
+#
+# @app.route("/admin_comment_save",methods = ['GET','POST'])
+# # @login_required
+# def admin_comment_save():
+#     if (request.method == 'POST'):
+#         mes_id=request.form.get('id')
+#         com=Comments.query.filter(Comments.id==mes_id).first()
+#         com.how_many_reports=0
+#         db.session.commit()
+#         return redirect("admin_index")
+#
+# @app.route("/admin_comment_save2",methods = ['GET','POST'])
+# # @login_required
+# def admin_comment_save2():
+#     if (request.method == 'POST'):
+#         mes_id=request.form.get('id')
+#         com=Comments.query.filter(Comments.id==mes_id).first()
+#         com.how_many_reports=0
+#         db.session.commit()
+#
+#         userid = com.user_id
+#         us = User.query.filter(User.id == userid).first()
+#         records = []
+#         x = []
+#         x.append(us)
+#         records.append(x)
+#
+#         comments_of_user = Comments.query.filter(Comments.user_id == us.id).order_by(
+#             desc(Comments.how_many_reports)).limit(100).all()
+#         x = []
+#         for i in comments_of_user:
+#             x.append(i)
+#         records.append(x)
+#     return render_template("admin_check_user.html", records=records)
+#
+# @app.route("/admin_comment_delete2",methods = ['GET','POST'])
+# # @login_required
+# def admin_comment_delete2():
+#     if (request.method == 'POST'):
+#         mes_id=request.form.get('id')
+#         com=Comments.query.filter(Comments.id==mes_id).first()
+#
+#         db.session.delete(com)
+#         db.session.commit()
+#
+#         userid=com.user_id
+#         us = User.query.filter(User.id == userid).first()
+#         records = []
+#         x = []
+#         x.append(us)
+#         records.append(x)
+#
+#         comments_of_user = Comments.query.filter(Comments.user_id == us.id).order_by(
+#             desc(Comments.how_many_reports)).limit(100).all()
+#         x = []
+#         for i in comments_of_user:
+#             x.append(i)
+#         records.append(x)
+#     return render_template("admin_check_user.html", records=records)
+#
+# @app.route("/admin_user_edit_proceed",methods = ['GET','POST'])
+# # @login_required
+# def admin_user_edit_proceed():
+#     if (request.method == 'POST'):
+#         id=request.form.get('id')
+#         nickname=request.form.get('nickname')
+#         email = request.form.get('email')
+#         password=request.form.get("password")
+#         age = request.form.get('age')
+#         sex = request.form.get('sex')
+#         is_admin = request.form.get('is_admin')
+#         print(id,nickname,email,password,age,sex,is_admin)
+#
+#         us=User.query.filter(User.id==id).first()
+#         us.id=id
+#         us.nickname=nickname
+#         us.email=email
+#         us.password=password
+#         us.age=age
+#         us.sex=sex
+#         us.is_admin=is_admin
+#         db.session.commit()
+#         return redirect("admin_index")
 
 # ---------------------------------------------                     end_of_admin_panel
 
@@ -62,7 +190,7 @@ if __name__ == "__main__":
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SECRET_KEY'] = 'XDDDDD'
     db.init_app(app)
-    login_manager.login_view = 'login'
+    login_manager.login_view = '/'
     login_manager.init_app(app)
     db.create_all(app=app)
     app.run(host='0.0.0.0', debug=True)

@@ -7,38 +7,77 @@
 <body>
     <h1>ADMIN PANEL</h1>
     <div>
-        <h2 class="lh2">USERS</h2>
+        <h2 class="lh2">USER AND COMMENTS</h2>
     </div>
    
-    <div class="frame1">   
+    <div class="frame1">  
+        {% for record in records[0] %}
         <form action="/admin_user_edit_proceed" method="post">
-            <input type="text" value="{{record[0]}}" name="id">
-            <input type="text" value="{{record[1]}}" name="nickname">
-            <input type="text" value="{{record[2]}}" name="email">
-            <input type="text" value="{{record[3]}}" name="password">
-            <input type="text" value="{{record[4]}}" name="age">
-            <input type="text" value="{{record[5]}}" name="sex">
-            <input type="text" value="{{record[6]}}" name="is_admin">
+            <input type="text" value="{{record.id}}" name="id">
+            <input type="text" value="{{record.nickname}}" name="nickname">
+            <input type="text" value="{{record.email}}" name="email">
+            <input type="text" value="{{record.password}}" name="password">
+            <input type="text" value="{{record.age}}" name="age">
+            <input type="text" value="{{record.sex}}" name="sex">
+            <input type="text" value="{{record.is_admin}}" name="is_admin">
             <input class="save" type="submit" value="&#10003;">
         </form>
         
         <form action="/admin_user_edit_ban" method="post">
-            <input type="hidden" value="{{record[0]}}" name="id">
-            <input type="hidden" value="{{record[1]}}" name="nickname">
-            <input type="hidden" value="{{record[2]}}" name="email">
-            <input type="hidden" value="{{record[3]}}" name="password">
-            <input type="hidden" value="{{record[4]}}" name="age">
-            <input type="hidden" value="{{record[5]}}" name="sex">
-            <input type="hidden" value="{{record[6]}}" name="is_admin">
+            <input type="hidden" value="{{record.id}}" name="id">
+            <input type="hidden" value="{{record.nickname}}" name="nickname">
+            <input type="hidden" value="{{record.email}}" name="email">
+            <input type="hidden" value="{{record.password}}" name="password">
+            <input type="hidden" value="{{record.age}}" name="age">
+            <input type="hidden" value="{{record.sex}}" name="sex">
+            <input type="hidden" value="{{record.is_admin}}" name="is_admin">
             <input class="ban" type="submit" value="&#128711;">
         </form>
-    {% for record in records[0] %}
+    
       </div>
         
       
     {% endfor %}
+    
+     <div class="frame2">
+{% for record in records[1] %}
+        <div class="separate2">
+      <div class="ramka5form">
+
+      <p>{{record.id}}, {{record.user_id}}, {{record.how_many_reports}}</p>
+          <span></span><p>{{record.content}}</p>
+                
+      </div>
+      <div class="options2">
+                <form action="/admin_comment_delete2" method="post">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
+                    <input class="delete" type="submit" value="&#10060;">
+                </form>
+              
+              <form action="/admin_comment_delete_and_ban2" method="post">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
+                    <input class="ban" type="submit" value="&#128711;">
+                </form>
+              
+              <form action="/admin_comment_save2" method="post">
+                    <input type="hidden" value="{{record.id}}" name="id">
+                    <input type="hidden" value="{{record.user_id}}" name="user_id">
+                    <input type="hidden" value="{{record.content}}" name="content">
+                    <input type="hidden" value="{{record.how_many_reports}}" name="how_many_reports">
+                    <input class="save" type="submit" value="&#10003;">
+                </form>
+          </div>
+        </div>
+    {% endfor %}
+    </div>
    
-    <a href="admin_index.html">&#8592;</a>
+    <a href="/admin_index">&#8592;</a>
     
     <form action="/admin_logout" method="post">
         <input class="logout" type="submit" value="logout"> 
@@ -70,17 +109,17 @@
         {
             font-size: 500%;
             position: absolute;
-            top: 80%;
-            left: 10%;
+            top: 85%;
+            left: 1%;
         }
         .frame1,.frame2
         {
             display: inline-block;
-            width: 50%;
+            width: 20%;
             height: 73%;
             float: left;
             margin-top: 1%;
-            margin-left: 2%;
+            margin-left: 3%;
             background: gray;
             border-radius: 20px;
             overflow-y: auto;
@@ -99,12 +138,7 @@
         }    
         .lh2
         {
-            float: left;
             margin-left: 20%;
-        }
-        .rh2
-        {
-            margin-left: 68%;
         }
         .ramka4form,.ramka5form
         {
@@ -134,6 +168,31 @@
             width: 70%;
             margin: 0;
             float: left;
+        }
+        .save
+        {
+            background: green;
+        }
+        .options2
+        {
+/*            background: black;*/
+            float: right;
+            height: 20%;
+            width: 8%;
+        }
+        .ramka5form
+        {
+            height: 15vh;
+            width: 90%;
+            overflow-y: auto;
+            word-wrap: break-word;
+            background: lightgray;
+        }
+        .flashes
+        {
+            color: red;
+            font-size: 150%;
+            
         }
     
     </style>
