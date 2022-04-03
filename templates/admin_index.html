@@ -27,47 +27,62 @@
     <div class="frame1">   
         
     {% for record in records[0] %}
+        <div class="separate1">
       <div class="ramka4form">
 
       <p>{{record[0]}}, {{record[1]}}, {{record[2]}}, {{record[3]}} ,{{record[4]}} ,{{record[5]}}, {{record[6]}}</p>
-                <form action="/admin_user_edit" method="post">
-                    <input type="hidden" value="{{record[0]}}" name="id">
-                    <input type="hidden" value="{{record[1]}}" name="nickname">
-                    <input type="hidden" value="{{record[2]}}" name="email">
-                    <input type="hidden" value="{{record[3]}}" name="password">
-                    <input type="hidden" value="{{record[4]}}" name="age">
-                    <input type="hidden" value="{{record[5]}}" name="sex">
-                    <input type="hidden" value="{{record[6]}}" name="is_admin">
-                    <input class="edit" type="submit" value="&#9998;">
-                </form>
-          </div>
+                
+      </div>
+        <form action="/admin_user_edit" method="post">
+            <input type="hidden" value="{{record[0]}}" name="id">
+            <input type="hidden" value="{{record[1]}}" name="nickname">
+            <input type="hidden" value="{{record[2]}}" name="email">
+            <input type="hidden" value="{{record[3]}}" name="password">
+            <input type="hidden" value="{{record[4]}}" name="age">
+            <input type="hidden" value="{{record[5]}}" name="sex">
+            <input type="hidden" value="{{record[6]}}" name="is_admin">
+            <input class="edit" type="submit" value="&#9998;">
+        </form>
+        </div>
     {% endfor %}
     </div>
     
     
     <div class="frame2">
-<!--
-    <h1 class="title">USERS</h1>    
-        
-    {% for record in records[0] %}
-      <div class="ramka4form">
+{% for record in records[1] %}
+        <div class="separate2">
+      <div class="ramka5form">
 
-      <p>{{record[0]}}, {{record[1]}}, {{record[2]}}, {{record[3]}} ,{{record[4]}} ,{{record[5]}}, {{record[6]}}</p>
-            <div class=accept_edit_or_deny>
-                <form action="/admin_user_edit" method="post">
+      <p>{{record[0]}}, {{record[1]}}, {{record[2]}}, {{record[3]}}</p>
+                
+      </div>
+      <div class="options2">
+                <form action="/admin_comment_delete" method="post">
                     <input type="hidden" value="{{record[0]}}" name="id">
                     <input type="hidden" value="{{record[1]}}" name="nickname">
-                    <input type="hidden" value="{{record[2]}}" name="email">
-                    <input type="hidden" value="{{record[3]}}" name="password">
-                    <input type="hidden" value="{{record[4]}}" name="age">
-                    <input type="hidden" value="{{record[5]}}" name="sex">
-                    <input type="hidden" value="{{record[6]}}" name="is_admin">
-                    <input class="edit" type="submit" value="&#9998;">
+                    <input type="hidden" value="{{record[2]}}" name="content">
+                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+                    <input class="delete" type="submit" value="&#10060;">
                 </form>
-            </div>    
+              
+              <form action="/admin_comment_ban" method="post">
+                    <input type="hidden" value="{{record[0]}}" name="id">
+                    <input type="hidden" value="{{record[1]}}" name="nickname">
+                    <input type="hidden" value="{{record[2]}}" name="content">
+                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+                    <input class="ban" type="submit" value="&#128711;">
+                </form>
+              
+              <form action="/admin_comment_delete_and_ban" method="post">
+                    <input type="hidden" value="{{record[0]}}" name="id">
+                    <input type="hidden" value="{{record[1]}}" name="nickname">
+                    <input type="hidden" value="{{record[2]}}" name="content">
+                    <input type="hidden" value="{{record[3]}}" name="how_many_reports">
+                    <input class="save" type="submit" value="&#10003;">
+                </form>
           </div>
+        </div>
     {% endfor %}
--->
     </div>
 <!--        -->
 <!--        -->
@@ -146,12 +161,12 @@
         {
             margin-left: 68%;
         }
-        .ramka4form
+        .ramka4form,.ramka5form
         {
             float: left;
             z-index: 3;
             height: 5vh;
-            width: 48vw;
+            width: 45vw;
             background: gray;
             position: relative;
             border-radius: 10px;
@@ -159,11 +174,10 @@
             overflow: hidden;
             margin-left: 2%;
         }    
+        
         .edit
         {
-            float: right;
             width: 5%;
-            margin-top: -2.5%;
             background: red;
             font-size: 20px;
         }
@@ -196,6 +210,27 @@
             background-color: lightgray;
             margin-bottom: 2vh;
         }    
+        .options2
+        {
+/*            background: black;*/
+            float: right;
+            height: 20%;
+            width: 8%;
+        }
+        .delete,.ban,.save
+        {
+            background: red;
+            font-size: 150%;
+            width: 70%;
+            margin: 0;
+            float: left;
+        }
+        .ramka5form
+        {
+            height: 15vh;
+            width: 90%;
+            overflow-y: auto;
+        }
     
     </style>
 </body>

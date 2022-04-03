@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>admin_panel</title>
+</head>
+<body>
+    <h1>ADMIN PANEL</h1>
+    <div>
+        <h2 class="lh2">USERS</h2>
+    </div>
+   
+    <div class="frame1">   
+        <form action="/admin_user_edit_proceed" method="post">
+            <input type="text" value="{{record[0]}}" name="id">
+            <input type="text" value="{{record[1]}}" name="nickname">
+            <input type="text" value="{{record[2]}}" name="email">
+            <input type="text" value="{{record[3]}}" name="password">
+            <input type="text" value="{{record[4]}}" name="age">
+            <input type="text" value="{{record[5]}}" name="sex">
+            <input type="text" value="{{record[6]}}" name="is_admin">
+            <input class="save" type="submit" value="&#10003;">
+        </form>
+        
+        <form action="/admin_user_edit_ban" method="post">
+            <input type="hidden" value="{{record[0]}}" name="id">
+            <input type="hidden" value="{{record[1]}}" name="nickname">
+            <input type="hidden" value="{{record[2]}}" name="email">
+            <input type="hidden" value="{{record[3]}}" name="password">
+            <input type="hidden" value="{{record[4]}}" name="age">
+            <input type="hidden" value="{{record[5]}}" name="sex">
+            <input type="hidden" value="{{record[6]}}" name="is_admin">
+            <input class="ban" type="submit" value="&#128711;">
+        </form>
+    {% for record in records[0] %}
+      </div>
+        
+      
+    {% endfor %}
+   
+    <a href="admin_index.html">&#8592;</a>
+    
+    <form action="/admin_logout" method="post">
+        <input class="logout" type="submit" value="logout"> 
+    </form>
+    
+    
+    <style>
+        *
+        {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        body
+        {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+        h1
+        {
+            display: inline-block;
+            margin-left: 50%;
+            transform:translate(-50%);
+            margin-top: 1%;
+            font-size: 45px;
+        }
+        a
+        {
+            font-size: 500%;
+            position: absolute;
+            top: 80%;
+            left: 10%;
+        }
+        .frame1,.frame2
+        {
+            display: inline-block;
+            width: 50%;
+            height: 73%;
+            float: left;
+            margin-top: 1%;
+            margin-left: 2%;
+            background: gray;
+            border-radius: 20px;
+            overflow-y: auto;
+        }    
+        .frame2
+        {
+            width: 45%;
+        }    
+        .logout
+        {
+            width: 10%;
+            font-size: 20px;
+            position: absolute;
+            left: 89%;
+            top: 5%;
+        }    
+        .lh2
+        {
+            float: left;
+            margin-left: 20%;
+        }
+        .rh2
+        {
+            margin-left: 68%;
+        }
+        .ramka4form,.ramka5form
+        {
+            float: left;
+            z-index: 3;
+            height: 5vh;
+            width: 45vw;
+            background: gray;
+            position: relative;
+            border-radius: 10px;
+            margin-bottom: 1vh;
+            overflow: hidden;
+            margin-left: 2%;
+        }    
+        input
+        {
+            height: 5vh;
+            width: 20vw;
+            border-radius: 10px;
+            background-color: lightgray;
+            margin-bottom: 2vh;
+        }    
+        .delete,.ban,.save
+        {
+            background: red;
+            font-size: 150%;
+            width: 70%;
+            margin: 0;
+            float: left;
+        }
+    
+    </style>
+</body>
+</html>
