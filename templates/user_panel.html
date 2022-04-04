@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <h1>{{ current_user.email }}</h1>
+
+<div class="ramka4">
+    <h2>Ogólne ustawienia konta:</h2>
+	<form  action="/edit_account" method="post">
+            <input class="edit_account" type="submit" value="Edytuj konto">
+        </form>
+      <div class="ramka4form">
+			Nazwa: <br/>
+			Wiek: <br/>
+			Płeć: <br/>
+			Email: <br/>
+          </div>
+</div>
+        <form  action="/delete_account" method="post">
+            <input class="deletee edit" type="submit" value="Usuń konto">
+        </form> 
+		<form  action="/fav_products" method="post">
+            <input class="fav_products" type="submit" value="Moje Produkty">
+        </form>
+		<form  action="/opinions" method="post">
+            <input class="opinions" type="submit" value="Moje Opinie">
+        </form>
+    
+    <style>
+    *
+    {
+        margin:0;
+        border: 0;
+        padding: 0;
+    }
+
+    .ramka4
+    {
+        position: relative;
+        top: 30%;
+        left: -8%;
+        height: 60vh;
+        width: 82vw;
+        overflow: auto;
+    }
+    .ramka4form
+    {
+        width: 50vw;
+        height: 15vh;
+        border-radius: 10px;
+        
+/*        background: #78c2ad;*/
+        margin-bottom: 2vh;
+        border: solid 3px #78c2ad;
+        margin-bottom: 2vh;
+    }
+    .accept_edit_or_deny
+    {
+        width: 6vw;
+        margin-right: 5px;
+        float: right;
+        margin-top: -5.5vh;
+    }
+    .accept,.deny,.edit
+    {
+        border-radius: 5px;
+        float: left;
+/*        margin-right: 0.5vw;*/
+        width: 2vw;
+        border: solid 2px #78c2ad;
+    }
+    .deletee
+    {
+         width: 10%;
+    height: 7vh;
+    background: darkred;
+    position: fixed;
+    right: 37px;
+    bottom: 54px;
+    color: white;
+    border: solid 2px red;
+    }
+	.deletee:hover
+	{
+    background-color: red;
+	}
+	.fav_products
+    {
+    width: 20%;
+    height: 140px;
+    background: grey;
+    position: fixed;
+    left: 100px;
+    bottom: 190px;
+    color: black;
+    border: solid 8px darkgray;
+    }
+	.fav_products:hover
+	{
+    background-color: darkgray;
+	}
+	.opinions
+    {
+    width: 20%;
+    height: 140px;
+    background: grey;
+    position: fixed;
+    left: 500px;
+    bottom: 190px;
+    color: black;
+    border: solid 8px darkgray;
+    }
+	.opinions:hover
+	{
+    background-color: darkgray;
+	}
+	.edit_account
+    {
+    width: 13%;
+    height: 48px;
+    background: grey;
+    position: fixed;
+    left: 504px;
+    bottom: 476px;
+    color: black;
+    border: solid 3px darkgray;
+    }
+	.edit_account:hover
+	{
+    background-color: darkgray;
+	}
+    </style>
+{% endblock content %}
