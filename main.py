@@ -181,6 +181,41 @@ class User(UserMixin, db.Model):
 
 # ---------------------------------------------                     end_of_admin_panel
 
+# ---------------------------------------------                     user_panel
+# @app.route("/")
+# @app.route("/home")
+# def main():
+#     return render_template('home.html')
+# @app.route('/user_panel')
+# #@login_required
+# def account():
+#     baza=[]
+#     return render_template('user_panel.html',baza=baza)
+
+# @app.route('/delete_account', methods = ['GET','POST'])
+# #@login_required
+# def delete_account():
+#     flash("konto usuniete!", 'danger')
+#     return redirect("/")
+
+# @app.route('/opinions', methods = ['GET','POST'])
+# #@login_required
+# def opinions():
+#     return render_template('opinions.html')
+
+# @app.route('/fav_products', methods = ['GET','POST'])
+# #@login_required
+# def fav_products():
+#     return render_template('fav_products.html')
+
+# @app.route('/edit_account', methods = ['GET','POST'])
+# #@login_required
+# def edit_account():
+#     return render_template('edit_account.html')
+
+# ---------------------------------------------                     end_of_user_panel
+
+
 @app.route("/")
 def index():
     return "hello world!"
