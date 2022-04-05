@@ -17,20 +17,47 @@
     
     <h1>ADMIN PANEL</h1>
     <div>
-        <h2 class="lh2">USERS</h2>
+        <h2 class="lh2">SEARCH USER BY:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CHOSE HOW MANY RECORDS TO SEE</h2>
     <h2 class="rh2">REPORTED COMMENTS</h2>
     </div>
     <div class="options">
          <div class="chose user">
-                <form action="/admin_search_user" method="post">
+                <form action="/admin_search_user_by_id" method="post">
+                    <input type="number" name="id" placeholder=" id">
+                    <input class="go" type="submit" value="->">
+                </form>
+         </div>
+    </div>
+    <div class="options">
+        <div class="chose user">
+                <form action="/admin_search_user_by_nickname" method="post">
                     <input type="text" name="nickname" placeholder=" nickname">
                     <input class="go" type="submit" value="->">
                 </form>
          </div>
-         <div class="chose comment">
-
-         </div>
     </div>
+        <div class="options">
+        <div class="chose user">
+                <form action="/admin_search_user_by_email" method="post">
+                    <input type="text" name="email" placeholder=" email">
+                    <input class="go" type="submit" value="->">
+                </form>
+         </div>
+          <div class="chose user">
+                <form action="/admin_show_x_users" method="post">
+                    <input type="number" name="how_many" placeholder=" how many users to show: (now {{records[2]}})">
+                    <input class="go" type="submit" value="->">
+                </form>
+         </div> 
+            <div class="chose user far">
+                <form action="/admin_show_x_comments" method="post">
+                    <input type="number" name="how_many" placeholder=" how many comments to show: (now {{records[3]}})">
+                    <input class="go" type="submit" value="->">
+                </form>
+         </div> 
+            
+        </div>
+    
    
     
     
@@ -43,14 +70,8 @@
       <p>{{record.id}}, {{record.nickname}}, {{record.email}}, {{record.password}} ,{{record.age}} ,{{record.sex}}, {{record.is_admin}}</p>
                 
       </div>
-        <form action="/admin_search_user" method="post">
+        <form action="/admin_search_user_by_id" method="post">
             <input type="hidden" value="{{record.id}}" name="id">
-            <input type="hidden" value="{{record.nickname}}" name="nickname">
-            <input type="hidden" value="{{record.email}}" name="email">
-            <input type="hidden" value="{{record.password}}" name="password">
-            <input type="hidden" value="{{record.age}}" name="age">
-            <input type="hidden" value="{{record.sex}}" name="sex">
-            <input type="hidden" value="{{record.is_admin}}" name="is_admin">
             <input class="edit" type="submit" value="&#9998;">
         </form>
         </div>
@@ -95,22 +116,6 @@
         </div>
     {% endfor %}
     </div>
-<!--        -->
-<!--        -->
-<!--        -->
-
-<!--
-    <form action="/admin_edit_user" method="post">
-        <input type="text" placeholder="nickname" value="" name="nickname">
-        <input type="email" placeholder="email" value="" name="email">
-        <input type="password" placeholder="password" value="" name="password">
-        <input type="text" placeholder="age" value="" name="age">
-        <input type="text" placeholder="sex" value="" name="sex">
-        <input type="number" placeholder="nickname" value="" name="is_admin">
-        <input type="submit" value="edit">
-    </form>
--->
-   
 
     
     <form action="/admin_logout" method="post">
@@ -166,7 +171,7 @@
         .lh2
         {
             float: left;
-            margin-left: 20%;
+            margin-left: 2%;
         }
         .rh2
         {
@@ -202,7 +207,12 @@
             height: 100%;
             width: 23%;
             float: left;
-            margin-left: 6%;
+            margin-left: 2%;
+/*            background: blue;*/
+        }
+        .far
+        {
+            margin-left: 5%;
         }
         .comment
         {
