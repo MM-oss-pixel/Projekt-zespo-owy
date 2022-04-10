@@ -16,9 +16,9 @@ login_manager = LoginManager()
 # ----------------------------------------------            const values for validation
 NICKNAME_LENGTH_MIN = 5
 NICKNAME_LENGTH_MAX = 50
-
+PIN_LENGTH_MAX = 6
 EMAIL_LENGTH_MAX = 100
-
+SHOP_NAME_LENGTH_MAX = 50
 PASSWORD_LENGTH_MIN = 8
 PASSWORD_LENGTH_MAX = 32
 
@@ -58,9 +58,34 @@ class Comments(db.Model):
         self.content=content
         self.how_many_reports=how_many_reports
 
+class authorization(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    pin = db.Column(db.String(PIN_LENGTH_MAX))
+    nickname = db.Column(db.String(NICKNAME_LENGTH_MAX))
+    is_authenticated = db.Column(db.String(1))
+    date_of_reset = db.Column(db.Date)
+
+    def __init__(self, user_id,pin,nickname, is_authenticated, date_of_reset):
+        self.user_id = user_id
+        self.pin = pin
+        self.nickname = nickname
+        self.is_authenticated = is_authenticated
+        self.date_of_reset = date_of_reset
+
+class shop_preferences(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    shop_name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+
+    def __init__(self, user_id,shop_name):
+        self.user_id = user_id
+        self.shop_name = shop_name
+
+
 # ---------------------------------------------                     admin_panel
 
-@app.route("/admin_show_x_users",methods = ['GET','POST'])
+@app.route("/admin_show_x_users", methods = ['GET','POST'])
 # @login_required
 def admin_show_x_users():
     if (request.method == 'POST'):
@@ -72,7 +97,7 @@ def admin_show_x_users():
         return redirect("/admin_index")
 
 
-@app.route("/admin_show_x_comments",methods = ['GET','POST'])
+@app.route("/admin_show_x_comments", methods = ['GET','POST'])
 # @login_required
 def admin_show_x_comments():
     if (request.method == 'POST'):
@@ -83,7 +108,7 @@ def admin_show_x_comments():
             HOW_MANY_REPORTED_COMMENTS_TO_SHOW=0
         return redirect("/admin_index")
 
-@app.route("/admin_show_x_comments2",methods = ['GET','POST'])
+@app.route("/admin_show_x_comments2", methods = ['GET','POST'])
 # @login_required
 def admin_show_x_comments2():
     if (request.method == 'POST'):
@@ -150,12 +175,12 @@ def admin_search_user_by_nickname():
     return render_template("admin_check_user.html",records=records)
 
 
-@app.route("/admin_search_user_by_id",methods = ['GET','POST'])
+@app.route("/admin_search_user_by_id", methods = ['GET','POST'])
 # @login_required
 def admin_search_user_by_id():
     if (request.method == 'POST'):
         id=request.form.get('id')
-        us=User.query.filter(User.id==id).first()
+        us=User.query.filter(User.id == id).first()
         if (len(id) == 0 or us==None):
             flash("podany user nie istnieje!")
             return redirect("/admin_index")
