@@ -17,12 +17,14 @@
 	<form  action="/edit_account" method="post">
             <input class="edit_account" type="submit" value="Edytuj konto">
         </form>
+      {% for record in baza %}
       <div class="ramka4form">
-			Nazwa: <br/>
-			Wiek: <br/>
-			Płeć: <br/>
-			Email: <br/>
+			Nazwa: {{record[0]}}<br/>
+			Wiek: {{record[1]}}<br/>
+			Płeć: {{record[2]}}<br/>
+			Email: {{record[3]}}<br/>
           </div>
+		  {% endfor %}
 </div>
         <form  action="/delete_account" method="post">
             <input class="deletee edit" type="submit" value="Usuń konto">
