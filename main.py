@@ -327,6 +327,9 @@ def admin_user_edit_proceed():
 # #@login_required
 # def account():
 #     baza=[]
+#     user = User.query.filter(User.id == current_user.id).first()
+#     baza.append((user.nickname,user.age,user.sex,user.email))
+#     
 #     return render_template('user_panel.html',baza=baza)
 
 # @app.route('/delete_account', methods = ['GET','POST'])
