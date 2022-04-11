@@ -57,6 +57,7 @@ CREATE TABLE `comments` (
   `user_id` int NOT NULL,
   `content` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `how_many_reports` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -67,7 +68,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (0,1,'Niestety kawa się zepsuła po 5 latach, nie polecam',1),(1,0,'No cukier jest za słodki moim zdaniem, kiedyś był lepszy',5),(2,2,'Smalec dobry, nie za tłusty',0);
+INSERT INTO `comments` VALUES (0,1,'Niestety kawa się zepsuła po 5 latach, nie polecam',1,NULL),(1,0,'No cukier jest za słodki moim zdaniem, kiedyś był lepszy',5,NULL),(2,2,'Smalec dobry, nie za tłusty',0,NULL);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -135,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-11 22:26:29
+-- Dump completed on 2022-04-11 22:35:12
