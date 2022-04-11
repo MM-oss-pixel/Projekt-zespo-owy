@@ -30,7 +30,7 @@ CREATE TABLE `authorization` (
   `pin` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `nickname` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `is_authenticated` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `date_of_reset` date DEFAULT NULL,
+  `date_of_reset` varchar(14) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -41,6 +41,7 @@ CREATE TABLE `authorization` (
 
 LOCK TABLES `authorization` WRITE;
 /*!40000 ALTER TABLE `authorization` DISABLE KEYS */;
+INSERT INTO `authorization` VALUES (0,0,'476290','StrażnikSalami','1','20210311120435'),(1,4,'476290','ZjemCiKasztany','1','20210311120435');
 /*!40000 ALTER TABLE `authorization` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,6 +67,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (0,1,'Niestety kawa się zepsuła po 5 latach, nie polecam',1),(1,0,'No cukier jest za słodki moim zdaniem, kiedyś był lepszy',5),(2,2,'Smalec dobry, nie za tłusty',0);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,6 +82,7 @@ CREATE TABLE `shop_references` (
   `id` int NOT NULL,
   `user_id` int DEFAULT NULL,
   `shop_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -90,6 +93,7 @@ CREATE TABLE `shop_references` (
 
 LOCK TABLES `shop_references` WRITE;
 /*!40000 ALTER TABLE `shop_references` DISABLE KEYS */;
+INSERT INTO `shop_references` VALUES (0,1,'Lidl',37563),(1,1,'Kaufland',21342),(2,1,'Carrefour',127),(3,2,'Carrefour',190),(4,2,'Kaufland',0),(5,0,'Biedronka',4673633);
 /*!40000 ALTER TABLE `shop_references` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,6 +111,7 @@ CREATE TABLE `user` (
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `age` int DEFAULT NULL,
   `is_admin` int DEFAULT NULL,
+  `sex` varchar(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -117,6 +122,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (0,'CezaryMielonka','gniazdoosi@oho.pl','szaryObywatel1234',23,0,'M'),(1,'ZiomekOdKiełbasy','lepszaszynka@mieso.com','Noszekalosz3',48,0,'F'),(2,'StażnikSalami','szynkazserem@kanapka.tv','Wesoła$$winka',64,1,'M'),(3,'IndianaJonesZakupów','niewiem@wiem.nie','Januszex#4',30,0,'F'),(4,'ZjemCiKasztany','pizzahawajska@cokto.lubi','Pizza#to#zycie!',15,1,'M');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -129,4 +135,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-10 23:44:31
+-- Dump completed on 2022-04-11 22:26:29
