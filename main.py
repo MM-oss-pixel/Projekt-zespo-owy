@@ -7,11 +7,12 @@ from flask_login import UserMixin, LoginManager, login_user, current_user, logou
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from flask_mail import Mail, Message
+from forms import RegistrationForm, LoginForm
 
 app = Flask(__name__)
 db = SQLAlchemy()
 login_manager = LoginManager()
-
+app.config['SECRET_KEY'] = 'XDDDDD' #bez tego krzaczy się autentykacja na MacOS XD
 
 # ----------------------------------------------            const values for validation
 NICKNAME_LENGTH_MIN = 5
@@ -295,9 +296,9 @@ def admin_user_edit_proceed():
 
 # ---------------------------------------------                     user_panel
 # @app.route("/")
-# @app.route("/home")
-# def main():
-#     return render_template('home.html')
+@app.route("/home")
+def home():
+    return render_template('home.html')
 # @app.route('/user_panel')
 # #@login_required
 # def account():
@@ -328,6 +329,25 @@ def admin_user_edit_proceed():
 # ---------------------------------------------                     end_of_user_panel
 
 
+
+# ---------------------------------------------                     register_panel
+@app.route('/register', methods= ['GET','POST'])
+def register():
+    form = RegistrationForm()
+    if form.validate_on_submit()
+    return render_template('register.html', title='Rejestracja', form=form)
+
+
+# ---------------------------------------------                     end_of_register_panel
+
+# ---------------------------------------------                     login_panel
+@app.route("/login")
+def login():
+    form = LoginForm()
+    return render_template('login.html', title='Logowanie', form=form)
+
+# ---------------------------------------------                     end_of_login_panel
+
 @app.route("/")
 def index():
     return "hello world!"
@@ -335,7 +355,7 @@ def index():
 
 if __name__ == "__main__":
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config['SECRET_KEY'] = 'XDDDDD'
+    #app.config['SECRET_KEY'] = 'XDDDDD'  
     db.init_app(app)
     login_manager.login_view = '/'
     login_manager.init_app(app)

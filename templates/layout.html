@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
-  <!-- https://bootswatch.com/minty/#top -->
-  
+    <!-- https://bootswatch.com/minty/#top -->
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,48 +12,52 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}">
-
-    {% if title %}
-        <title>Ceneło przez Ł - {{ title }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}"> {% if title %}
+    <title>Ceneło przez Ł - {{ title }}</title>
     {% else %}
-        <title>Ceneło przez Ł</title>
+    <title>Ceneło przez Ł</title>
     {% endif %}
 </head>
+
 <body>
     <header class="site-header">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="{{ url_for('main') }}">Ceneło przez Ł</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{{ url_for('home') }}">Ceneło przez Ł</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('main') }}">Strona domowa
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('home') }}">Strona domowa
                   <!-- <span class="visually-hidden"></span> -->
                 </a>
-              </li>
-<!--               <li class="nav-item">
+                        </li>
+                        <!--               <li class="nav-item">
                 <a class="nav-link" href="/blog">Ogłoszenia</a>
               </li> -->
-              <li class="nav-item">
-                <a class="nav-link" href="/user_panel">Panel użytkownika</a>
-              </li>
-			  <li class="nav-item">
-                <a class="nav-link" href="/fav_products">Produkty</a>
-              </li>
-			  <li class="nav-item">
-                <a class="nav-link" href="/opinions">Opinie</a>
-              </li>
-              <div class="navbar-nav">
-                {% if current_user.is_authenticated %}
-                  
-                  {% endif %}
-              </div>
-<!--               <li class="nav-item dropdown">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/user_panel">Panel użytkownika</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/fav_products">Produkty</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/opinions">Opinie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Logowanie</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register">Rejestracja</a>
+                        </li>
+                        <!-- <div class="navbar-nav">
+                              if current_user.is_authenticated   <---- Powoduje krzaki
+                              endif -->
+                        <!-- </div> -->
+                        <!--               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Dropdown</a>
                 <div class="dropdown-menu">
                   <a class="dropdown-item" href="#">Action</a>
@@ -62,25 +67,26 @@
                   <a class="dropdown-item" href="#">Separated link</a>
                 </div>
               </li> -->
-            </ul>
-<!--             <form class="d-flex">
+                    </ul>
+                    <!--             <form class="d-flex">
               <input class="form-control me-sm-2" type="text" placeholder="Search">
               <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
             </form> -->
-          </div>
-        </div>
-      </nav>
+                </div>
+            </div>
+        </nav>
     </header>
     <main role="main" class="container">
-      <div class="row">
-        <div class="col-md-8">
-		<style>
-    .bg-primary{background-color:#009C34 !important}
-    
-    </style>
-          {% block content %}{% endblock %}
-        </div>
-        <!-- <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-8">
+                <style>
+                    .bg-primary {
+                        background-color: #009C34 !important
+                    }
+                </style>
+                {% block content %}{% endblock %}
+            </div>
+            <!-- <div class="col-md-4">
           <div class="content-section">
             <h3>Nawigacja</h3>
             <p class='text-muted'>
@@ -92,7 +98,7 @@
             </p>
           </div>
         </div> -->
-      </div>
+        </div>
     </main>
 
 
@@ -102,5 +108,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
-</html>
 
+</html>

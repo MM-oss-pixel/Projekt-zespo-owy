@@ -1,0 +1,112 @@
+{% extends "layout.html" %}
+{% block content %}
+        <div class="container">
+        <form class="userDataForm" action="" method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset class="form-group">
+                <p class="contains-h1"><h1>Zarejestruj się!</h1></p>
+                <p class="bigFormInput">{{ form.username(class="bigInput", placeholder="Podaj swój pseudonim") }}</p>
+                <p class="doubleColumns">{{ form.password(class="smallInput", placeholder="Podaj hasło") }} {{ form.confirmPassword(class="smallInput", placeholder="Powtórz swoje hasło") }}</p>
+                <p class="bigFormInput">{{ form.email(class="bigInput", placeholder="Podaj swój email") }}</p>
+                <p class="bigFormInput">{{ form.confirmEmail(class="bigInput", placeholder="Powtórz swój email") }}</p>
+                <p class="doubleColumns">{{ form.sex(class="smallInput", placeholder="Płeć") }} {{ form.age(class="smallInput", placeholder="Wiek") }}
+                <p class="termsText"> {{ form.termsAccepted() }} <span style="margin-left: 1vw">Zapoznałem się z regulaminem i akceptuję go.</span></p>
+                <p class="buttonP">{{ form.submit(class="accountButton", placeholder="Utwórz konto") }}</p>
+            </fieldset>
+        </form>
+    </div>
+
+    <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #686868;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 3vw;
+            padding: 1vw;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            height: 80vh;
+            width: 60vw;
+            background-color: #B4D2E7;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .userDataForm {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .bigInput {
+            border-radius: 6px;
+            height: 3vw;
+            width: 30vw;
+            font-size: 1vw;
+            margin: 0.5vh 1vw;
+            text-align: center;
+        }
+        
+        .smallInput {
+            border-radius: 6px;
+            height: 3vw;
+            width: 14vw;
+            margin: 0.5vh 1vw;
+            font-size: 1vw;
+            text-align: center;
+        }
+        .buttonP{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .termsText {
+            margin-left: 1vw;
+            display: flex;
+            font-size: 1vw;
+        }
+        
+        .doubleColumns {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+        .accountButton {
+            border-radius: 6px;
+            width: 20vw;
+            height: 3vw;
+            font-size: 1vw;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            background-color: #5c0029;
+            box-sizing: border-box;
+        }
+
+
+        input::placeholder,
+        select {
+            color: #000;
+        }
+    </style>
+{% endblock content %}
