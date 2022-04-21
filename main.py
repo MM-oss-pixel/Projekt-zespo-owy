@@ -5,9 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import  desc
 from flask_login import UserMixin, LoginManager, login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
+from datetime import datetime,timedelta
 from flask_mail import Mail, Message
 from forms import RegistrationForm, LoginForm
+
 
 app = Flask(__name__)
 db = SQLAlchemy()
@@ -17,11 +18,12 @@ app.config['SECRET_KEY'] = 'XDDDDD' #bez tego krzaczy się autentykacja na MacOS
 # ----------------------------------------------            const values for validation
 NICKNAME_LENGTH_MIN = 5
 NICKNAME_LENGTH_MAX = 50
-
+PIN_LENGTH_MAX = 6
 EMAIL_LENGTH_MAX = 100
-
+SHOP_NAME_LENGTH_MAX = 50
 PASSWORD_LENGTH_MIN = 8
 PASSWORD_LENGTH_MAX = 32
+DELETE_COMMENT_AFTER=7
 
 HOW_MANY_USERS_TO_SHOW=10
 HOW_MANY_REPORTED_COMMENTS_TO_SHOW=10
@@ -53,13 +55,65 @@ class Comments(db.Model):
     user_id = db.Column(db.Integer)
     content = db.Column(db.String(EMAIL_LENGTH_MAX))
     how_many_reports = db.Column(db.Integer)
+    state=db.Column(db.Integer)
+    date_of_deletion= db.Column(db.Date)
 
-    def __init__(self, user_id,content,how_many_reports):
+    def __init__(self, user_id,content,how_many_reports,state,date_of_deletion):
         self.user_id=user_id
         self.content=content
         self.how_many_reports=how_many_reports
+        self.state=state
+        self.date_of_deletion=date_of_deletion
+
+class authorization(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    pin = db.Column(db.String(PIN_LENGTH_MAX))
+    nickname = db.Column(db.String(NICKNAME_LENGTH_MAX))
+    is_authenticated = db.Column(db.String(1))
+    date_of_reset = db.Column(db.Date)
+
+    def __init__(self, user_id,pin,nickname, is_authenticated, date_of_reset):
+        self.user_id = user_id
+        self.pin = pin
+        self.nickname = nickname
+        self.is_authenticated = is_authenticated
+        self.date_of_reset = date_of_reset
+
+class shop_preferences(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    shop_name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+
+    def __init__(self, user_id,shop_name):
+        self.user_id = user_id
+        self.shop_name = shop_name
+
 
 # ---------------------------------------------                     admin_panel
+
+def delete_old_comments():
+    # czasowka na usuwanie komentarzy starych
+    # komentarze maja stany 0 i 1
+    # 0 - ok, 1 - do usuniecia
+    # gdy stan == 0 to data jest 1900-01-01 w bazie
+    # gdy stan == 1 to data jest dzisiaj +x czasu(zmienna globalna)
+    # gdy roznica czasu bedzie <0 i data bedzie inna niz 1900-01-01 i stan ==1 to komentarz zostanie usuniety
+
+    com = Comments.query.filter(Comments.state == 1)
+    for i in com:
+        tab = str(i.date_of_deletion - datetime.now().date())
+        date_time_str = '1900-01-01'
+        date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d')
+        date_time_obj = datetime.date(date_time_obj)
+        if (tab == '0:00:00'):
+            x = 0
+        else:
+            tab = str(i.date_of_deletion - datetime.now().date()).split(" ")
+            x = int(tab[0])
+        if (x <= 0 and i.date_of_deletion != date_time_obj):
+            db.session.delete(i)
+            db.session.commit()
 
 @app.route("/admin_show_x_users",methods = ['GET','POST'])
 # @login_required
@@ -71,7 +125,6 @@ def admin_show_x_users():
         if(HOW_MANY_USERS_TO_SHOW<0):
             HOW_MANY_USERS_TO_SHOW=0
         return redirect("/admin_index")
-
 
 @app.route("/admin_show_x_comments",methods = ['GET','POST'])
 # @login_required
@@ -201,10 +254,16 @@ def admin_search_user_by_email():
 # @login_required
 def admin_comment_delete():
     if (request.method == 'POST'):
-        mes_id=request.form.get('id')
+        mes_id=int(request.form.get('id'))
         com=Comments.query.filter(Comments.id==mes_id).first()
-
-        db.session.delete(com)
+        if(com.state==1):
+            com.state=0
+            date_time_str = '1900-01-01'
+            date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d')
+            com.date_of_deletion=date_time_obj
+        else:
+            com.state=1
+            com.date_of_deletion = datetime.now().date() + (timedelta(days=DELETE_COMMENT_AFTER))
         db.session.commit()
         return redirect("admin_index")
 
@@ -245,12 +304,25 @@ def admin_comment_save2():
 
 @app.route("/admin_comment_delete2",methods = ['GET','POST'])
 # @login_required
+
+
+#TO NIE DO KONCA ZADZIALA
+#BO ZMIANY OD RAZU SA W BAZIE GLOBALNIE
+#WIEC JAKBY KTOS CHCIAL TO USUNIE NAM RZECZY :v
+
+
+
 def admin_comment_delete2():
     if (request.method == 'POST'):
         mes_id=request.form.get('id')
         com=Comments.query.filter(Comments.id==mes_id).first()
 
-        db.session.delete(com)
+        # db.session.delete(com)
+        # db.session.commit()
+        if (com.state == 1):
+            com.state = 0
+        else:
+            com.state = 1
         db.session.commit()
 
         userid=com.user_id
@@ -303,6 +375,9 @@ def home():
 # #@login_required
 # def account():
 #     baza=[]
+#     user = User.query.filter(User.id == current_user.id).first()
+#     baza.append((user.nickname,user.age,user.sex,user.email))
+#     
 #     return render_template('user_panel.html',baza=baza)
 
 # @app.route('/delete_account', methods = ['GET','POST'])

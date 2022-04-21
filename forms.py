@@ -7,7 +7,7 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators = [DataRequired(),  Length(min=8, max=32)])
     confirmPassword = PasswordField('Password', validators = [DataRequired(), Length(min=8, max=32), EqualTo('password')])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    sex = SelectField('sex', choices=[("K", "Kobieta"), ("M","Męzczyzna")])
+    sex = SelectField('sex', choices=[("F", "Kobieta"), ("M","Męzczyzna")])
     age = IntegerField('age', validators=[DataRequired()])
     confirmEmail = StringField('confirmEmail', validators=[DataRequired(), Email(), EqualTo('email')])
     termsAccepted = BooleanField('Accepted')
