@@ -85,8 +85,20 @@ class shop_preferences(db.Model):
     user_id = db.Column(db.Integer)
     shop_name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
 
-    def __init__(self, user_id,shop_name):
+    def __init__(self, user_id, shop_name):
         self.user_id = user_id
+        self.shop_name = shop_name
+
+class products(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+    brand = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+    shop_name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+
+    def __init__(self, id, name, brand, shop_name):
+        self.id = id
+        self.name = name
+        self.brand = brand
         self.shop_name = shop_name
 
 
