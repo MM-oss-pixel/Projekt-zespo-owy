@@ -54,13 +54,15 @@ class Comments(db.Model):
     user_id = db.Column(db.Integer)
     content = db.Column(db.String(EMAIL_LENGTH_MAX))
     how_many_reports = db.Column(db.Integer)
+    product_id = db.Column(db.Integer)
     state=db.Column(db.Integer)
     date_of_deletion= db.Column(db.Date)
 
-    def __init__(self, user_id,content,how_many_reports,state,date_of_deletion):
+    def __init__(self, user_id,content,how_many_reports,product_id,state,date_of_deletion):
         self.user_id=user_id
         self.content=content
         self.how_many_reports=how_many_reports
+        self.product_id=product_id
         self.state=state
         self.date_of_deletion=date_of_deletion
 
@@ -87,6 +89,20 @@ class shop_preferences(db.Model):
     def __init__(self, user_id,shop_name):
         self.user_id = user_id
         self.shop_name = shop_name
+
+#EXPERIMENTAL!
+class Product(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    shop_name = db.Column(db.String(SHOP_NAME_LENGTH_MAX))
+    price = db.Column(db.Integer)####shoud be REAL!!!!
+    mark  = db.Column(db.String(100))
+
+    def __init__(self, name, shop_name,price,mark):
+        self.name = name
+        self.shop_name = shop_name
+        self.price= price
+        self.mark= mark
 
 
 # ---------------------------------------------                     admin_panel
@@ -118,33 +134,42 @@ def delete_old_comments():
 # @login_required
 def admin_show_x_users():
     if (request.method == 'POST'):
-        how_many=int(request.form.get('how_many'))
-        global HOW_MANY_USERS_TO_SHOW
-        HOW_MANY_USERS_TO_SHOW=how_many
-        if(HOW_MANY_USERS_TO_SHOW<0):
-            HOW_MANY_USERS_TO_SHOW=0
+        if(request.form.get('how_many')==""):
+            flash("wprowadz liczbe!")
+        else:
+            how_many=int(request.form.get('how_many'))
+            global HOW_MANY_USERS_TO_SHOW
+            HOW_MANY_USERS_TO_SHOW=how_many
+            if(HOW_MANY_USERS_TO_SHOW<0):
+                HOW_MANY_USERS_TO_SHOW=0
         return redirect("/admin_index")
 
 @app.route("/admin_show_x_comments",methods = ['GET','POST'])
 # @login_required
 def admin_show_x_comments():
     if (request.method == 'POST'):
-        how_many=int(request.form.get('how_many'))
-        global HOW_MANY_REPORTED_COMMENTS_TO_SHOW
-        HOW_MANY_REPORTED_COMMENTS_TO_SHOW=how_many
-        if(HOW_MANY_REPORTED_COMMENTS_TO_SHOW<0):
-            HOW_MANY_REPORTED_COMMENTS_TO_SHOW=0
+        if (request.form.get('how_many') == ""):
+            flash("wprowadz liczbe!")
+        else:
+            how_many=int(request.form.get('how_many'))
+            global HOW_MANY_REPORTED_COMMENTS_TO_SHOW
+            HOW_MANY_REPORTED_COMMENTS_TO_SHOW=how_many
+            if(HOW_MANY_REPORTED_COMMENTS_TO_SHOW<0):
+                HOW_MANY_REPORTED_COMMENTS_TO_SHOW=0
         return redirect("/admin_index")
 
 @app.route("/admin_show_x_comments2",methods = ['GET','POST'])
 # @login_required
 def admin_show_x_comments2():
     if (request.method == 'POST'):
-        how_many=int(request.form.get('how_many'))
-        global HOW_MANY_REPORTED_COMMENTS_TO_SHOW
-        HOW_MANY_REPORTED_COMMENTS_TO_SHOW=how_many
-        if(HOW_MANY_REPORTED_COMMENTS_TO_SHOW<0):
-            HOW_MANY_REPORTED_COMMENTS_TO_SHOW=0
+        if (request.form.get('how_many') == ""):
+            flash("wprowadz liczbe!")
+        else:
+            how_many=int(request.form.get('how_many'))
+            global HOW_MANY_REPORTED_COMMENTS_TO_SHOW
+            HOW_MANY_REPORTED_COMMENTS_TO_SHOW=how_many
+            if(HOW_MANY_REPORTED_COMMENTS_TO_SHOW<0):
+                HOW_MANY_REPORTED_COMMENTS_TO_SHOW=0
         userid=(request.form.get('id'))
         us = User.query.filter(User.id == userid).first()
         records = []
@@ -366,39 +391,77 @@ def admin_user_edit_proceed():
 # ---------------------------------------------                     end_of_admin_panel
 
 # ---------------------------------------------                     user_panel
-# @app.route("/")
-# @app.route("/home")
-# def main():
-#     return render_template('home.html')
-# @app.route('/user_panel')
-# #@login_required
-# def account():
-#     baza=[]
-#     user = User.query.filter(User.id == current_user.id).first()
-#     baza.append((user.nickname,user.age,user.sex,user.email))
-#     
-#     return render_template('user_panel.html',baza=baza)
+@app.route("/")
+@app.route("/home")
+def main():
+    return render_template('home.html')
+@app.route('/user_panel')
+#@login_required
+def account():
+    baza=[]
+    user = User.query.filter(User.id == current_user.id).first()
+    baza.append((user.nickname,user.age,user.sex,user.email))
 
-# @app.route('/delete_account', methods = ['GET','POST'])
-# #@login_required
-# def delete_account():
-#     flash("konto usuniete!", 'danger')
-#     return redirect("/")
+    return render_template('user_panel.html',baza=baza)
 
-# @app.route('/opinions', methods = ['GET','POST'])
-# #@login_required
-# def opinions():
-#     return render_template('opinions.html')
+@app.route('/delete_account', methods = ['GET','POST'])
+#@login_required
+def delete_account():
+    flash("konto usuniete!", 'danger')
+    return redirect("/")
 
-# @app.route('/fav_products', methods = ['GET','POST'])
-# #@login_required
-# def fav_products():
-#     return render_template('fav_products.html')
+@app.route('/opinions', methods = ['GET','POST'])
+#@login_required
+def opinions():
+    return render_template('opinions.html')
 
-# @app.route('/edit_account', methods = ['GET','POST'])
-# #@login_required
-# def edit_account():
-#     return render_template('edit_account.html')
+@app.route('/fav_products', methods = ['GET','POST'])
+#@login_required
+def fav_products():
+    return render_template('fav_products.html')
+
+@app.route('/edit_account', methods = ['GET','POST'])
+#@login_required
+def edit_account():
+    return render_template('edit_account.html')
+
+#EXPERIMENTAL!!!
+@app.route('/japko', methods = ['GET','POST'])
+#@login_required
+def japko():
+    records=[]
+    J = Product.query.filter(Product.id==1).first()
+    records.append(J)
+    comss=[]
+    coms=Comments.query.filter(Comments.product_id==J.id)
+    for i in coms:
+        comss.append(i)
+    records.append(comss)
+    return render_template('japko.html',records=records)
+
+#EXPERIMENTAL!!!
+@app.route('/add_comment_japko', methods = ['GET','POST'])
+#@login_required
+def add_comment_japko():
+    if (request.method == 'POST'):
+        id=request.form.get('id')
+        com=request.form.get('komentarz')
+        date_time_str = '1900-01-01'
+        date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d')
+        #'AnonymousUserMixin' object has no attribute 'id'!!!!!!!!!!!!!!!!!!!!!!!!1 nie pojdzie bez logowania
+        # c=Comments(current_user.id, com,0,id,0,date_time_obj)
+        c = Comments(1, com, 0, id, 0, date_time_obj)
+        db.session.add(c)
+        db.session.commit()
+    records = []
+    J = Product.query.filter(Product.id == 1).first()
+    records.append(J)
+    comss = []
+    coms = Comments.query.filter(Comments.product_id == J.id)
+    for i in coms:
+        comss.append(i)
+    records.append(comss)
+    return render_template('japko.html', records=records)
 
 # ---------------------------------------------                     end_of_user_panel
 

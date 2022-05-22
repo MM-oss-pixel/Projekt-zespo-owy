@@ -5,6 +5,15 @@
     <title>admin_panel</title>
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
     <h1>ADMIN PANEL</h1>
     <div>
         <h2 class="lh2">USER AND COMMENTS</h2>
