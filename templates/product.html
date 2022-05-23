@@ -28,7 +28,8 @@
     <div class="right">
 <form action="/report_comment" method="post">
         <input type="hidden" value="{{record[0].id}}" name="id">
-        <input class="report_comment" type="submit" value="&#9872;">
+    <input type="hidden" value="{{record[3]}}" name="product_id">
+        <input class="{{record[4]}} report_comment" type="submit" value="&#9873;">
 <!-- if reported &#9873;   -->
 </form>
 <form action="/like_or_unlike_comment" method="post">
@@ -49,6 +50,10 @@
     .liked
     {
         background: green;
+    }
+    .red
+    {
+        background: red;
     }
 .ramka4form,.ramka5form
         {

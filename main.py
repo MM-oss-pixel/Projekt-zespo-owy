@@ -57,14 +57,16 @@ class Comments(db.Model):
     product_id = db.Column(db.Integer)
     state=db.Column(db.Integer)
     date_of_deletion= db.Column(db.Date)
+    how_many_likes = db.Column(db.Integer)
 
-    def __init__(self, user_id,content,how_many_reports,product_id,state,date_of_deletion):
+    def __init__(self, user_id,content,how_many_reports,product_id,state,date_of_deletion,how_many_likes):
         self.user_id=user_id
         self.content=content
         self.how_many_reports=how_many_reports
         self.product_id=product_id
         self.state=state
         self.date_of_deletion=date_of_deletion
+        self.how_many_likes = how_many_likes
 
 class authorization(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -106,12 +108,12 @@ class Product(db.Model):
 
 class Reports(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id=db.Column(db.Integer)
-    comment_id=db.Column(db.Integer)
+    user_id = db.Column(db.Integer)
+    comment_id = db.Column(db.Integer)
 
-    def __init__(self, user_id,comment_id):
-        self.user_id=user_id
-        self.comment_id=comment_id
+    def __init__(self, user_id, comment_id):
+        self.user_id = user_id
+        self.comment_id = comment_id
 
 
 class Likes(db.Model):
@@ -144,6 +146,12 @@ def delete_old_comments():
             tab = str(i.date_of_deletion - datetime.now().date()).split(" ")
             x = int(tab[0])
         if (x <= 0 and i.date_of_deletion != date_time_obj):
+            reps=Reports.query.filter(Reports.comment_id==i.id)
+            likes=Likes.query.filter(Likes.comment_id==i.id)
+            for j in reps:
+                db.session.delete(j)
+            for j in likes:
+                db.session.delete(j)
             db.session.delete(i)
             db.session.commit()
 
@@ -315,6 +323,9 @@ def admin_comment_save():
         mes_id=request.form.get('id')
         com=Comments.query.filter(Comments.id==mes_id).first()
         com.how_many_reports=0
+        reps = Reports.query.filter(Reports.comment_id == com.id)
+        for j in reps:
+            db.session.delete(j)
         db.session.commit()
         return redirect("admin_index")
 
@@ -325,6 +336,9 @@ def admin_comment_save2():
         mes_id=request.form.get('id')
         com=Comments.query.filter(Comments.id==mes_id).first()
         com.how_many_reports=0
+        reps = Reports.query.filter(Reports.comment_id == com.id)
+        for j in reps:
+            db.session.delete(j)
         db.session.commit()
 
         userid = com.user_id
@@ -342,16 +356,6 @@ def admin_comment_save2():
         records.append(x)
         records.append(HOW_MANY_REPORTED_COMMENTS_TO_SHOW)
     return render_template("admin_check_user.html", records=records)
-
-@app.route("/admin_comment_delete2",methods = ['GET','POST'])
-# @login_required
-
-
-#TO NIE DO KONCA ZADZIALA
-#BO ZMIANY OD RAZU SA W BAZIE GLOBALNIE
-#WIEC JAKBY KTOS CHCIAL TO USUNIE NAM RZECZY :v
-
-
 
 def admin_comment_delete2():
     if (request.method == 'POST'):
@@ -458,9 +462,16 @@ def show_product():
                 display = "liked"
             else:
                 display = ""
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            if (r != None):
+                display2 = "red"
+            else:
+                display2 = ""
+
             comments.append(i)
-            likess = Likes.query.filter(Likes.comment_id == i.id).count()
-            combine.append((i, likess, display,id))
+            likess = i.how_many_likes
+            combine.append((i, likess, display, id, display2))
         records.append(prod)
         records.append(combine)
         return render_template("product.html", records=records)
@@ -484,6 +495,7 @@ def like_or_unlike_comment():
         records = []
         combine = []
         display = ""
+        display2 = ""
         id = int(request.form.get('product_id'))
         prod = Product.query.filter(Product.id == id)
         coms = Comments.query.filter(Comments.product_id == id)
@@ -495,12 +507,69 @@ def like_or_unlike_comment():
                 display = "liked"
             else:
                 display = ""
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            if (r != None):
+                display2 = "red"
+            else:
+                display2 = ""
+
             comments.append(i)
             likess = Likes.query.filter(Likes.comment_id == i.id).count()
-            combine.append((i, likess, display, id))
+            i.how_many_likes = likess
+            db.session.commit()
+            combine.append((i, likess, display, id, display2))
         records.append(prod)
         records.append(combine)
         return render_template("product.html", records=records)
+
+@app.route('/report_comment', methods = ['GET','POST'])
+#@login_required
+def report_comment():
+    if (request.method == 'POST'):
+        id=request.form.get('id')
+        # l=Reports.query.filter(Reports.comment_id==id, Reports.user_id==current_user.id).first()
+        l = Reports.query.filter(Reports.comment_id == id, Reports.user_id == 0).first()
+        if(l!=None):
+            db.session.delete(l)
+        else:
+            # l = Reports(current_user.id, id)
+            l=Reports(0,id)
+            db.session.add(l)
+        db.session.commit()
+
+        records = []
+        combine = []
+        display = ""
+        display2=""
+        id = int(request.form.get('product_id'))
+        prod = Product.query.filter(Product.id == id)
+        coms = Comments.query.filter(Comments.product_id == id)
+        comments = []
+        for i in coms:
+            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            if (l != None):
+                display = "liked"
+            else:
+                display = ""
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            if (r != None):
+                display2 = "red"
+            else:
+                display2 = ""
+
+            comments.append(i)
+            likess = Likes.query.filter(Likes.comment_id == i.id).count()
+            repss = Reports.query.filter(Reports.comment_id == i.id).count()
+            i.how_many_reports = repss
+            db.session.commit()
+            combine.append((i, likess, display, id, display2))
+        records.append(prod)
+        records.append(combine)
+        return render_template("product.html", records=records)
+
 
 @app.route('/edit_account', methods = ['GET','POST'])
 #@login_required
@@ -518,7 +587,7 @@ def add_comment():
         date_time_obj = datetime.strptime(date_time_str, '%Y-%m-%d')
         #'AnonymousUserMixin' object has no attribute 'id'!!!!!!!!!!!!!!!!!!!!!!!!1 nie pojdzie bez logowania
         # c=Comments(current_user.id, com,0,id,0,date_time_obj)
-        c = Comments(1, com, 0, id, 0, date_time_obj)
+        c = Comments(1, com, 0, id, 0, date_time_obj,0)
         db.session.add(c)
         db.session.commit()
 
@@ -536,9 +605,16 @@ def add_comment():
                 display = "liked"
             else:
                 display = ""
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            if (r != None):
+                display2 = "red"
+            else:
+                display2 = ""
+
             comments.append(i)
             likess = Likes.query.filter(Likes.comment_id == i.id).count()
-            combine.append((i, likess, display, id))
+            combine.append((i, likess, display, id, display2))
         records.append(prod)
         records.append(combine)
         return render_template("product.html", records=records)
