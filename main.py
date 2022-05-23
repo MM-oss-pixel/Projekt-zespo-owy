@@ -104,7 +104,24 @@ class Product(db.Model):
         self.price= price
         self.mark= mark
 
+class Reports(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id=db.Column(db.Integer)
+    comment_id=db.Column(db.Integer)
 
+    def __init__(self, user_id,comment_id):
+        self.user_id=user_id
+        self.comment_id=comment_id
+
+
+class Likes(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer)
+    comment_id = db.Column(db.Integer)
+
+    def __init__(self, user_id, comment_id):
+        self.user_id = user_id
+        self.comment_id = comment_id
 # ---------------------------------------------                     admin_panel
 
 def delete_old_comments():
@@ -427,23 +444,63 @@ def fav_products():
 #@login_required
 def show_product():
     if (request.method == 'POST'):
-        records=[]
-        id=int(request.form.get('id'))
-        prod=Product.query.filter(Product.id==id)
-        coms=Comments.query.filter(Comments.product_id==id)
-        comments=[]
+        records = []
+        combine = []
+        display = ""
+        id = int(request.form.get('id'))
+        prod = Product.query.filter(Product.id == id)
+        coms = Comments.query.filter(Comments.product_id == id)
+        comments = []
         for i in coms:
+            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            if (l != None):
+                display = "liked"
+            else:
+                display = ""
             comments.append(i)
+            likess = Likes.query.filter(Likes.comment_id == i.id).count()
+            combine.append((i, likess, display,id))
         records.append(prod)
-        records.append(comments)
-        return render_template("product.html",records=records)
+        records.append(combine)
+        return render_template("product.html", records=records)
 
 
-    records = []
-    products = Product.query.all()
-    records.append(products)
-    return render_template('fav_products.html', records=records)
+@app.route('/like_or_unlike_comment', methods = ['GET','POST'])
+#@login_required
+def like_or_unlike_comment():
+    if (request.method == 'POST'):
+        id=request.form.get('id')
+        # l=Likes.query.filter(Likes.comment_id==id, Likes.user_id==current_user.id).first()
+        l = Likes.query.filter(Likes.comment_id == id, Likes.user_id == 0).first()
+        if(l!=None):
+            db.session.delete(l)
+        else:
+            # l = Likes(current_user.id, id)
+            l=Likes(0,id)
+            db.session.add(l)
+        db.session.commit()
 
+        records = []
+        combine = []
+        display = ""
+        id = int(request.form.get('product_id'))
+        prod = Product.query.filter(Product.id == id)
+        coms = Comments.query.filter(Comments.product_id == id)
+        comments = []
+        for i in coms:
+            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            if (l != None):
+                display = "liked"
+            else:
+                display = ""
+            comments.append(i)
+            likess = Likes.query.filter(Likes.comment_id == i.id).count()
+            combine.append((i, likess, display, id))
+        records.append(prod)
+        records.append(combine)
+        return render_template("product.html", records=records)
 
 @app.route('/edit_account', methods = ['GET','POST'])
 #@login_required
@@ -451,8 +508,6 @@ def edit_account():
     return render_template('edit_account.html')
 
 
-
-#EXPERIMENTAL!!!
 @app.route('/add_comment', methods = ['GET','POST'])
 #@login_required
 def add_comment():
@@ -466,15 +521,26 @@ def add_comment():
         c = Comments(1, com, 0, id, 0, date_time_obj)
         db.session.add(c)
         db.session.commit()
-        records=[]
+
+        records = []
+        combine = []
+        display = ""
         id = int(request.form.get('id'))
         prod = Product.query.filter(Product.id == id)
         coms = Comments.query.filter(Comments.product_id == id)
         comments = []
         for i in coms:
+            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            if (l != None):
+                display = "liked"
+            else:
+                display = ""
             comments.append(i)
+            likess = Likes.query.filter(Likes.comment_id == i.id).count()
+            combine.append((i, likess, display, id))
         records.append(prod)
-        records.append(comments)
+        records.append(combine)
         return render_template("product.html", records=records)
 
 # ---------------------------------------------                     end_of_user_panel

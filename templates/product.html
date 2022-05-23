@@ -14,31 +14,41 @@
 
 
     <h2>Ulubione produkty:</h2>
-    {% for record in records[0] %}
+    
     <div class="ramka5form">
         <div class="left">
-        <p>{{record.id}} {{record.name}} {{record.price}}</p>
+        <p>{{records[0][0].id}} {{records[0][0].name}} {{records[0][0].price}}</p>
         </div>
     </div>
-    {% endfor %}
+
 
 {% for record in records[1] %}
-<div class="ramka4form">{{record.content}}</div>
+<div class="ramka4form">
+    {{record[0].content}},  Like:{{record[1]}}
+    <div class="right">
+<form action="/report_comment" method="post">
+        <input type="hidden" value="{{record[0].id}}" name="id">
+        <input class="report_comment" type="submit" value="&#9872;">
+<!-- if reported &#9873;   -->
+</form>
+<form action="/like_or_unlike_comment" method="post">
+        <input type="hidden" value="{{record[0].id}}" name="id">
+        <input type="hidden" value="{{record[3]}}" name="product_id">
+        <input class="{{record[2]}} like_or_unlike_comment" type="submit" value="+">
+</form>
+</div>
+</div>
 {% endfor %}
 
 <form action="/add_comment" method="post">
         <input type="hidden" value="{{records[0][0].id}}" name="id">
         <input type="text" placeholder="napisz komentarz" name="komentarz">
         <input class="save" type="submit" value="&#10003;">
-    </form>
+</form>
 <style>
-    .left
+    .liked
     {
-        float: left;
-    }
-    .right
-    {
-        float: right;
+        background: green;
     }
 .ramka4form,.ramka5form
         {
@@ -60,6 +70,15 @@
             word-wrap: break-word;
             background: lightgreen;
         }
-
+    .right
+    {
+        float: right;
+        height: 5vh;
+        width: 4vw;
+    }
+    .report_comment,.like_or_unlike_comment
+    {
+        float: left;
+    }
 </style>
 {% endblock content %}
