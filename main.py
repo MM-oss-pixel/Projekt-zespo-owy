@@ -418,31 +418,44 @@ def opinions():
 @app.route('/fav_products', methods = ['GET','POST'])
 #@login_required
 def fav_products():
-    return render_template('fav_products.html')
+    records = []
+    products = Product.query.all()
+    records.append(products)
+    return render_template('fav_products.html',records=records)
+
+@app.route('/show_product', methods = ['GET','POST'])
+#@login_required
+def show_product():
+    if (request.method == 'POST'):
+        records=[]
+        id=int(request.form.get('id'))
+        prod=Product.query.filter(Product.id==id)
+        coms=Comments.query.filter(Comments.product_id==id)
+        comments=[]
+        for i in coms:
+            comments.append(i)
+        records.append(prod)
+        records.append(comments)
+        return render_template("product.html",records=records)
+
+
+    records = []
+    products = Product.query.all()
+    records.append(products)
+    return render_template('fav_products.html', records=records)
+
 
 @app.route('/edit_account', methods = ['GET','POST'])
 #@login_required
 def edit_account():
     return render_template('edit_account.html')
 
-#EXPERIMENTAL!!!
-@app.route('/japko', methods = ['GET','POST'])
-#@login_required
-def japko():
-    records=[]
-    J = Product.query.filter(Product.id==1).first()
-    records.append(J)
-    comss=[]
-    coms=Comments.query.filter(Comments.product_id==J.id)
-    for i in coms:
-        comss.append(i)
-    records.append(comss)
-    return render_template('japko.html',records=records)
+
 
 #EXPERIMENTAL!!!
-@app.route('/add_comment_japko', methods = ['GET','POST'])
+@app.route('/add_comment', methods = ['GET','POST'])
 #@login_required
-def add_comment_japko():
+def add_comment():
     if (request.method == 'POST'):
         id=request.form.get('id')
         com=request.form.get('komentarz')
@@ -453,15 +466,16 @@ def add_comment_japko():
         c = Comments(1, com, 0, id, 0, date_time_obj)
         db.session.add(c)
         db.session.commit()
-    records = []
-    J = Product.query.filter(Product.id == 1).first()
-    records.append(J)
-    comss = []
-    coms = Comments.query.filter(Comments.product_id == J.id)
-    for i in coms:
-        comss.append(i)
-    records.append(comss)
-    return render_template('japko.html', records=records)
+        records=[]
+        id = int(request.form.get('id'))
+        prod = Product.query.filter(Product.id == id)
+        coms = Comments.query.filter(Comments.product_id == id)
+        comments = []
+        for i in coms:
+            comments.append(i)
+        records.append(prod)
+        records.append(comments)
+        return render_template("product.html", records=records)
 
 # ---------------------------------------------                     end_of_user_panel
 

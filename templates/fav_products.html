@@ -12,7 +12,55 @@
 
     <h1>{{ current_user.email }}</h1>
 
-<div class="ramka4">
+
     <h2>Ulubione produkty:</h2>
-</div>
+    {% for record in records[0] %}
+    <div class="ramka5form">
+        <div class="left">
+        <p>{{record.id}} {{record.name}} {{record.price}}</p>
+        </div>
+        <div class="right">
+        <form class="move" action="/show_product" method="post">
+            <input type="hidden" value="{{record.id}}" name="id">
+            <input class="go" type="submit" value="->">
+        </form>
+        </div>
+    </div>
+    {% endfor %}
+
+
+
+
+
+<style>
+    .left
+    {
+        float: left;
+    }
+    .right
+    {
+        float: right;
+    }
+.ramka4form,.ramka5form
+        {
+            float: left;
+            z-index: 3;
+            height: 2vh;
+            width: 45vw;
+            background: lightgreen;
+            position: relative;
+            border-radius: 10px;
+            margin-bottom: 1vh;
+            overflow: hidden;
+            margin-left: 2%;
+        }
+.ramka5form
+        {
+            height: 5vh;
+            width: 90%;
+            overflow-y: hidden;
+            word-wrap: break-word;
+        }
+
+</style>
 {% endblock content %}

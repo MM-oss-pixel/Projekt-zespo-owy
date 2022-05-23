@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <h1>{{ current_user.email }}</h1>
+
+
+    <h2>Ulubione produkty:</h2>
+    {% for record in records[0] %}
+    <div class="ramka5form">
+        <div class="left">
+        <p>{{record.id}} {{record.name}} {{record.price}}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+{% for record in records[1] %}
+<div class="ramka4form">{{record.content}}</div>
+{% endfor %}
+
+<form action="/add_comment" method="post">
+        <input type="hidden" value="{{records[0][0].id}}" name="id">
+        <input type="text" placeholder="napisz komentarz" name="komentarz">
+        <input class="save" type="submit" value="&#10003;">
+    </form>
+<style>
+    .left
+    {
+        float: left;
+    }
+    .right
+    {
+        float: right;
+    }
+.ramka4form,.ramka5form
+        {
+            float: left;
+            z-index: 3;
+            height: 5vh;
+            width: 45vw;
+            background: lightblue;
+            position: relative;
+            border-radius: 10px;
+            margin-bottom: 1vh;
+            overflow: hidden;
+            margin-left: 2%;
+        }
+.ramka5form
+        {
+            width: 90%;
+            overflow-y: hidden;
+            word-wrap: break-word;
+            background: lightgreen;
+        }
+
+</style>
+{% endblock content %}
