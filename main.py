@@ -2,16 +2,31 @@ from lib2to3.pgen2 import token
 import os
 from flask import Flask, render_template, request, redirect, url_for, flash, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import  desc
+from sqlalchemy import  desc, func
 from flask_login import UserMixin, LoginManager, login_user, current_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime,timedelta
 from flask_mail import Mail, Message
+from forms import RegistrationForm, LoginForm
 
 
 app = Flask(__name__)
 db = SQLAlchemy()
 login_manager = LoginManager()
+
+
+# nie odkryłem jeszcze czemu ale gdy konfiguracja apki jest na końcu w main to nic nie chce działać z funkcjonalności na macOS, aktualizowałem pythona itd i stypa XD
+
+# app.config['LOGIN_DISABLED'] = True
+# app.config['SECRET_KEY'] = 'XDDDDD'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# app.config['SECRET_KEY'] = 'XDDDDD'
+# db = SQLAlchemy(app)
+# login_manager = LoginManager(app)
+# login_manager.login_view = '/'
+
+
 
 
 # ----------------------------------------------            const values for validation
@@ -21,7 +36,7 @@ PIN_LENGTH_MAX = 6
 EMAIL_LENGTH_MAX = 100
 SHOP_NAME_LENGTH_MAX = 50
 PASSWORD_LENGTH_MIN = 8
-PASSWORD_LENGTH_MAX = 32
+PASSWORD_LENGTH_MAX = 32 #Odnoszę wrazenie ze trzeba to zmienić skoro będziemy uzywać hashowanych hasełek
 DELETE_COMMENT_AFTER=7
 
 HOW_MANY_USERS_TO_SHOW=10
@@ -621,6 +636,48 @@ def add_comment():
 
 # ---------------------------------------------                     end_of_user_panel
 
+# ---------------------------------------------                     register_panel
+@app.route('/register', methods= ['GET','POST'])
+def register():
+    form = RegistrationForm()
+    userCheck = User.query.filter_by(nickname=form.username.data).first()
+    userMail = User.query.filter_by(email=func.lower(form.email.data)).first() 
+    
+    if form.validate_on_submit():
+        if userCheck:
+            flash('Nickname jest juz zajęty!', 'danger') 
+        elif userMail:
+            flash('Email jest juz zajęty!', 'danger')
+        else:
+            passwordHashed = generate_password_hash(form.password.data)
+            user = User(form.username.data, form.email.data, passwordHashed, form.age.data, form.sex.data, 0)
+            user.is_authenticated = 1
+            db.session.add(user)
+            db.session.commit()
+            flash(f'Zarejestrowano pomyślnie!', 'success')
+            return redirect(url_for('login'))
+    return render_template('register.html', title='Rejestracja', form=form)
+
+
+# ---------------------------------------------                     end_of_register_panel
+
+# ---------------------------------------------                     login_panel
+@app.route("/login", methods= ['GET','POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=func.lower(form.email.data)).first()
+        if user and check_password_hash(user.password, form.password.data):
+            login_user(user)
+            flash("Zalogowano pomyślnie!", 'success')
+            return redirect(url_for('main'))
+    else:
+        flash('Logowanie niepowiodło się, sprawdź poprawność adresu e-mail i hasła!', 'danger')
+    return render_template('login.html', title='Logowanie', form=form)
+
+# ---------------------------------------------                     end_of_login_panel
+
+
 
 @app.route("/")
 def index():
@@ -628,6 +685,10 @@ def index():
 
 
 if __name__ == "__main__":
+    # # app.config['LOGIN_DISABLED'] = True
+    # db.create_all(app=app)
+    # app.run(host='0.0.0.0', debug=True)
+
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SECRET_KEY'] = 'XDDDDD'
     db.init_app(app)
