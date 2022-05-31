@@ -17,13 +17,13 @@ login_manager = LoginManager()
 
 # nie odkryłem jeszcze czemu ale gdy konfiguracja apki jest na końcu w main to nic nie chce działać z funkcjonalności na macOS, aktualizowałem pythona itd i stypa XD
 
-# # app.config['LOGIN_DISABLED'] = True
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# app.config['SECRET_KEY'] = 'XDDDDD'
-# db = SQLAlchemy(app)
-# login_manager = LoginManager(app)
-# login_manager.login_view = '/'
+# app.config['LOGIN_DISABLED'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = 'XDDDDD'
+db = SQLAlchemy(app)
+login_manager = LoginManager(app)
+login_manager.login_view = '/'
 
 
 
@@ -470,14 +470,14 @@ def show_product():
         coms = Comments.query.filter(Comments.product_id == id)
         comments = []
         for i in coms:
-            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
-            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            # l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
             if (l != None):
                 display = "liked"
             else:
                 display = ""
-            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
-            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
             if (r != None):
                 display2 = "red"
             else:
@@ -496,13 +496,13 @@ def show_product():
 def like_or_unlike_comment():
     if (request.method == 'POST'):
         id=request.form.get('id')
-        # l=Likes.query.filter(Likes.comment_id==id, Likes.user_id==current_user.id).first()
-        l = Likes.query.filter(Likes.comment_id == id, Likes.user_id == 0).first()
+        l=Likes.query.filter(Likes.comment_id==id, Likes.user_id==current_user.id).first()
+        # l = Likes.query.filter(Likes.comment_id == id, Likes.user_id == 0).first()
         if(l!=None):
             db.session.delete(l)
         else:
-            # l = Likes(current_user.id, id)
-            l=Likes(0,id)
+            l = Likes(current_user.id, id)
+            # l=Likes(0,id)
             db.session.add(l)
         db.session.commit()
 
@@ -515,14 +515,14 @@ def like_or_unlike_comment():
         coms = Comments.query.filter(Comments.product_id == id)
         comments = []
         for i in coms:
-            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
-            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            # l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
             if (l != None):
                 display = "liked"
             else:
                 display = ""
-            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
-            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
             if (r != None):
                 display2 = "red"
             else:
@@ -542,13 +542,13 @@ def like_or_unlike_comment():
 def report_comment():
     if (request.method == 'POST'):
         id=request.form.get('id')
-        # l=Reports.query.filter(Reports.comment_id==id, Reports.user_id==current_user.id).first()
-        l = Reports.query.filter(Reports.comment_id == id, Reports.user_id == 0).first()
+        l=Reports.query.filter(Reports.comment_id==id, Reports.user_id==current_user.id).first()
+        # l = Reports.query.filter(Reports.comment_id == id, Reports.user_id == 0).first()
         if(l!=None):
             db.session.delete(l)
         else:
-            # l = Reports(current_user.id, id)
-            l=Reports(0,id)
+            l = Reports(current_user.id, id)
+            # l=Reports(0,id)
             db.session.add(l)
         db.session.commit()
 
@@ -561,14 +561,14 @@ def report_comment():
         coms = Comments.query.filter(Comments.product_id == id)
         comments = []
         for i in coms:
-            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
-            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            # l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
             if (l != None):
                 display = "liked"
             else:
                 display = ""
-            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
-            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
             if (r != None):
                 display2 = "red"
             else:
@@ -613,14 +613,14 @@ def add_comment():
         coms = Comments.query.filter(Comments.product_id == id)
         comments = []
         for i in coms:
-            # l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
-            l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
+            l=Likes.query.filter(Likes.comment_id==i.id, Likes.user_id==current_user.id).first()
+            # l = Likes.query.filter(Likes.comment_id == i.id, Likes.user_id == 0).first()
             if (l != None):
                 display = "liked"
             else:
                 display = ""
-            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
-            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
+            r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == current_user.id).first()
+            # r = Reports.query.filter(Reports.comment_id == i.id, Reports.user_id == 0).first()
             if (r != None):
                 display2 = "red"
             else:
@@ -690,14 +690,15 @@ def index():
     return "hello world!"
 
 
+
 if __name__ == "__main__":
-    # app.config['LOGIN_DISABLED'] = True
-    db.create_all(app=app)
-    app.run(host='0.0.0.0', debug=True)
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config['SECRET_KEY'] = 'XDDDDD'
-    db.init_app(app)
-    login_manager.login_view = '/'
-    login_manager.init_app(app)
+    # # app.config['LOGIN_DISABLED'] = True
+    # db.create_all(app=app)
+    # # app.run(host='0.0.0.0', debug=True)
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    # app.config['SECRET_KEY'] = 'XDDDDD'
+    # db.init_app(app)
+    # login_manager.login_view = '/'
+    # login_manager.init_app(app)
     db.create_all(app=app)
     app.run(host='0.0.0.0', debug=True)
