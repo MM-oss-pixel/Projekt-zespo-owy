@@ -11,7 +11,7 @@ class RegistrationForm(FlaskForm):
     sex = SelectField('sex', choices=[("F", "Kobieta"), ("M","Męzczyzna")])
     age = IntegerField('age', validators=[DataRequired(), NumberRange(min=1, max=None)])
     confirmEmail = StringField('confirmEmail', validators=[DataRequired(), Email(), EqualTo('email')])
-    termsAccepted = BooleanField('Accepted')
+    termsAccepted = BooleanField('Accepted', validators=[DataRequired()])
     submit = SubmitField('Rejestracja')
     
 class LoginForm(FlaskForm):

@@ -17,8 +17,7 @@ login_manager = LoginManager()
 
 # nie odkryłem jeszcze czemu ale gdy konfiguracja apki jest na końcu w main to nic nie chce działać z funkcjonalności na macOS, aktualizowałem pythona itd i stypa XD
 
-# app.config['LOGIN_DISABLED'] = True
-# app.config['SECRET_KEY'] = 'XDDDDD'
+# # app.config['LOGIN_DISABLED'] = True
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # app.config['SECRET_KEY'] = 'XDDDDD'
@@ -36,7 +35,7 @@ PIN_LENGTH_MAX = 6
 EMAIL_LENGTH_MAX = 100
 SHOP_NAME_LENGTH_MAX = 50
 PASSWORD_LENGTH_MIN = 8
-PASSWORD_LENGTH_MAX = 32 #Odnoszę wrazenie ze trzeba to zmienić skoro będziemy uzywać hashowanych hasełek
+PASSWORD_LENGTH_MAX = 32 #Odnoszę wrazenie ze trzeba to zmienić skoro będziemy uzywać hashowanych hasełek7
 DELETE_COMMENT_AFTER=7
 
 HOW_MANY_USERS_TO_SHOW=10
@@ -435,7 +434,7 @@ def main():
 #@login_required
 def account():
     baza=[]
-    user = User.query.filter(User.id == current_user.id).first()
+    user = User.query.filter(User.id == current_user.get_id).first()
     baza.append((user.nickname,user.age,user.sex,user.email))
 
     return render_template('user_panel.html',baza=baza)
@@ -639,6 +638,8 @@ def add_comment():
 # ---------------------------------------------                     register_panel
 @app.route('/register', methods= ['GET','POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main'))
     form = RegistrationForm()
     userCheck = User.query.filter_by(nickname=form.username.data).first()
     userMail = User.query.filter_by(email=func.lower(form.email.data)).first() 
@@ -651,7 +652,6 @@ def register():
         else:
             passwordHashed = generate_password_hash(form.password.data)
             user = User(form.username.data, form.email.data, passwordHashed, form.age.data, form.sex.data, 0)
-            user.is_authenticated = 1
             db.session.add(user)
             db.session.commit()
             flash(f'Zarejestrowano pomyślnie!', 'success')
@@ -664,20 +664,26 @@ def register():
 # ---------------------------------------------                     login_panel
 @app.route("/login", methods= ['GET','POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('main'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=func.lower(form.email.data)).first()
         if user and check_password_hash(user.password, form.password.data):
             login_user(user)
             flash("Zalogowano pomyślnie!", 'success')
-            return redirect(url_for('main'))
-    else:
-        flash('Logowanie niepowiodło się, sprawdź poprawność adresu e-mail i hasła!', 'danger')
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('main'))
+        else:
+            flash('Logowanie nieudane, sprawdź poprawność adresu e-mail i hasła!', 'danger')
     return render_template('login.html', title='Logowanie', form=form)
 
 # ---------------------------------------------                     end_of_login_panel
-
-
+@app.route("/logout", methods= ['GET',])
+def logout():
+    logout_user()
+ 
+    return redirect(url_for('main'))
 
 @app.route("/")
 def index():
@@ -685,10 +691,9 @@ def index():
 
 
 if __name__ == "__main__":
-    # # app.config['LOGIN_DISABLED'] = True
-    # db.create_all(app=app)
-    # app.run(host='0.0.0.0', debug=True)
-
+    # app.config['LOGIN_DISABLED'] = True
+    db.create_all(app=app)
+    app.run(host='0.0.0.0', debug=True)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config['SECRET_KEY'] = 'XDDDDD'
     db.init_app(app)
