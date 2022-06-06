@@ -14,5 +14,42 @@
 
 <div class="ramka4">
     <h2>Edycja ustawień konta:</h2>
+	<form method="post">
+	
+		<label for="nickname">Nazwa Konta</label>
+		<br>
+        <input type="text" name="nickname"
+               value="{{ request.form['nickname'] }}"></input>
+        <br>
+		
+        <label for="email">Email</label>
+        <br>
+        <input type="email" name="email"
+               value="{{ request.form['email'] }}"></input>
+        <br>
+		
+		<label for="password">Password</label>
+		<br>
+        <input type="password" name="password"
+               value="{{ request.form['password'] }}"></input>
+        <br>
+		
+		<label for="age">Wiek</label>
+		<br>
+        <input type="number" name="age"
+               value="{{ request.form['age'] }}"></input>
+        <br><br>
+		
+		<label for="age">Płeć</label>
+		<select name="sex" method="GET" action="/">
+		<option value="{{sex[0]}}" selected>{{sex[0]}}</option>
+		{% for sex in sex[1:] %}
+		<option value="{{sex}}">{{sex}}</option>
+		{% endfor %}
+		</select>
+		<br>
+		
+        <input type="submit" name="submit_button" value="Potwierdź">
+    </form>
 </div>
 {% endblock content %}

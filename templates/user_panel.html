@@ -10,13 +10,15 @@
   {% endif %}
 {% endwith %}
 
-    <h1>{{ current_user.email }}</h1>
-
 <div class="ramka4">
-    <h2>Ogólne ustawienia konta:</h2>
-	<form  action="/edit_account" method="post">
-            <input class="edit_account" type="submit" value="Edytuj konto">
-        </form>
+<div class="row">
+     <div class="col-md-auto"><h2>Ogólne ustawienia konta:</h2></div>
+     <div class="col"><form  action="/edit_account" method="post">
+				<input class="edit_account" type="submit" value="Edytuj konto">
+			</form>
+			</div>
+</div>
+		
       {% for record in baza %}
       <div class="ramka4form">
 			Nazwa: {{record[0]}}<br/>
@@ -46,12 +48,11 @@
 
     .ramka4
     {
-        position: relative;
+        position: fixed;
         top: 30%;
-        left: -8%;
+        left: 100px;
         height: 60vh;
-        width: 82vw;
-        overflow: auto;
+        width: 60vw;
     }
     .ramka4form
     {
@@ -130,8 +131,8 @@
     height: 48px;
     background: grey;
     position: fixed;
-    left: 504px;
-    bottom: 476px;
+    left: 536px;
+    bottom: 456px;
     color: black;
     border: solid 3px darkgray;
     }
