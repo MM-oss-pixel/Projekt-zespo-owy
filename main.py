@@ -430,20 +430,51 @@ def admin_user_edit_proceed():
 @app.route("/home")
 def main():
     return render_template('home.html')
+
 @app.route('/user_panel')
-#@login_required
+@login_required
 def account():
     baza=[]
-    user = User.query.filter(User.id == current_user.get_id).first()
+    user = User.query.filter(User.id == current_user.id).first()
     baza.append((user.nickname,user.age,user.sex,user.email))
-
+    
     return render_template('user_panel.html',baza=baza)
 
 @app.route('/delete_account', methods = ['GET','POST'])
-#@login_required
+@login_required
 def delete_account():
+    User.query.filter(User.id == current_user.id).delete()
+    db.session.commit()
+    
     flash("konto usuniete!", 'danger')
-    return redirect("/")
+    return redirect("/home")
+
+@app.route('/edit_account', methods = ['GET','POST'])
+@login_required
+def edit_account():
+    user = User.query.filter(User.id == current_user.id).first()
+    if request.method == 'POST':
+        
+        new_nickname = request.form.get('nickname',False)
+        new_age = request.form.get('age',False)
+        new_email = request.form.get('email',False)
+        new_password = request.form.get('password',False)
+        new_sex = request.form.get('sex',False)
+        
+        if "submit_button" in request.form:
+            
+            user.nickname = new_nickname
+            user.age = new_age
+            user.email = new_email
+            user.password = new_password
+            user.sex = new_sex
+            db.session.commit()
+            return redirect('/user_panel')
+        
+    return render_template('edit_account.html',sex=['M','F'])
+
+# ---------------------------------------------                     end_of_user_panel
+
 
 @app.route('/opinions', methods = ['GET','POST'])
 #@login_required
@@ -583,13 +614,6 @@ def report_comment():
         records.append(prod)
         records.append(combine)
         return render_template("product.html", records=records)
-
-
-@app.route('/edit_account', methods = ['GET','POST'])
-#@login_required
-def edit_account():
-    return render_template('edit_account.html')
-
 
 @app.route('/add_comment', methods = ['GET','POST'])
 #@login_required
