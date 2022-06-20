@@ -9,35 +9,41 @@
     </ul>
   {% endif %}
 {% endwith %}
-
-<div class="ramka4">
-<div class="row">
-     <div class="col-md-auto"><h2>Ogólne ustawienia konta:</h2></div>
-     <div class="col"><form  action="/edit_account" method="post">
-				<input class="edit_account" type="submit" value="Edytuj konto">
+<div>
+	<div class="ramka4">
+	<div class="row">
+		<div class="col-md-auto"><h2>Ogólne ustawienia konta:</h2></div>
+		<div class="col"><form  action="/edit_account" method="post">
+					<input class="edit_account" type="submit" value="Edytuj konto">
+				</form>
+				</div>
+	</div>
+			
+		{% for record in baza %}
+		<div class="ramka4form">
+				Nazwa: {{record[0]}}<br/>
+				Wiek: {{record[1]}}<br/>
+				Płeć: {{record[2]}}<br/>
+				Email: {{record[3]}}<br/>
+			</div>
+			{% endfor %}
+	</div>
+		<div class="contenerbutton">
+			<div class="box">
+			<form  action="/fav_products" method="post">
+				<input class="fav_products" type="submit" value="Moje Produkty">
 			</form>
 			</div>
+			<div class="box">
+			<form  action="/opinions" method="post">
+				<input class="opinions" type="submit" value="Moje Opinie">
+			</form>
+			</div>
+		</div>
+			<form  action="/delete_account" method="post">
+				<input class="deletee edit" type="submit" value="Usuń konto">
+			</form> 
 </div>
-		
-      {% for record in baza %}
-      <div class="ramka4form">
-			Nazwa: {{record[0]}}<br/>
-			Wiek: {{record[1]}}<br/>
-			Płeć: {{record[2]}}<br/>
-			Email: {{record[3]}}<br/>
-          </div>
-		  {% endfor %}
-</div>
-        <form  action="/delete_account" method="post">
-            <input class="deletee edit" type="submit" value="Usuń konto">
-        </form> 
-		<form  action="/fav_products" method="post">
-            <input class="fav_products" type="submit" value="Moje Produkty">
-        </form>
-		<form  action="/opinions" method="post">
-            <input class="opinions" type="submit" value="Moje Opinie">
-        </form>
-    
     <style>
     *
     {
@@ -97,12 +103,7 @@
 	}
 	.fav_products
     {
-    width: 20%;
-    height: 140px;
     background: grey;
-    position: fixed;
-    left: 100px;
-    bottom: 190px;
     color: black;
     border: solid 8px darkgray;
     }
@@ -112,12 +113,7 @@
 	}
 	.opinions
     {
-    width: 20%;
-    height: 140px;
     background: grey;
-    position: fixed;
-    left: 500px;
-    bottom: 190px;
     color: black;
     border: solid 8px darkgray;
     }
@@ -127,12 +123,8 @@
 	}
 	.edit_account
     {
-    width: 13%;
-    height: 48px;
+    
     background: grey;
-    position: fixed;
-    left: 536px;
-    bottom: 456px;
     color: black;
     border: solid 3px darkgray;
     }
@@ -140,5 +132,33 @@
 	{
     background-color: darkgray;
 	}
+	.contenerbutton
+    {
+    width: 100%;
+    margin-top: 50px;
+    display: flex;
+    }
+    .box
+    {
+    /*width: 32%; */
+    /* height: 347px; */
+    /* background-color: #fd5000; */
+    /* color: #ffffff; */
+    /* font-family: 'Open Sans', sans-serif; */
+    font-size: 36px;
+    font-weight: bold;
+    font-style: normal;
+    font-stretch: normal;
+    /* line-height: 0.79; */
+    letter-spacing: 0.18px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    padding-top: 350px;
+    padding-right: 100px;
+}
+    }
     </style>
 {% endblock content %}
