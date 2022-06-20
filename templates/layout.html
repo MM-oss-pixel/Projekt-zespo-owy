@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/minty/bootstrap.min.css" integrity="sha384-H4X+4tKc7b8s4GoMrylmy2ssQYpDHoqzPa9aKXbDwPoPUA3Ra8PA5dGzijN+ePnH" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='bootstrap.css') }}"> {% if title %}
-    <title>Ceneło przez Ł - {{ title }}</title>
+    <title>DLS - {{ title }}</title>
     {% else %}
-    <title>Ceneło przez Ł</title>
+    <title>DLS</title>
     {% endif %}
 </head>
 
@@ -23,13 +23,14 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" href="{{ url_for('main') }}">Ceneło przez Ł</a>
+                <a class="navbar-brand" href="{{ url_for('main') }}"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
 
                 <div class="collapse navbar-collapse" id="navbarColor01">
                     <ul class="navbar-nav me-auto">
+					
                         <li class="nav-item">
                             <a class="nav-link" href="{{ url_for('main') }}">Strona domowa</a>
                         </li>
@@ -42,15 +43,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/fav_products">Produkty</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/opinions">Opinie</a>
-                        </li>
 
                     </ul>
                     <ul class="navbar-nav me-auto">
                         {% if current_user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/logout" style="float: right">Wyloguj {{current_user.get_id()}} </a>
+                            <a class="nav-link" href="/logout" style="float: right">Wyloguj</a>
                         </li>
                         {% else %}
                         <li class="nav-item">

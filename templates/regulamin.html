@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <h1>Regulamin</h1>
+	<br>
+	<h3>Wymagania techniczne</h3>
+	<div>Do korzystania ze strony internetowej, w tym przeglądania jej treści oraz dodanie opinii, niezbędne są:</div>
+	<div style="text-indent:20px;">-urządzenie końcowe z dostępem do sieci Internet.</div>
+	<div style="text-indent:20px;">-aktywne konto poczty elektronicznej (e-mail).</div>
+	<div style="text-indent:20px;">-włączona obsługa plików cookies.</div>
+	<br>
+	<h3>Informacje ogólne</h3>
+	<div>Usługodawca w najszerszym dopuszczalnym przez prawo zakresie nie ponosi odpowiedzialności za zakłócenia w tym przerwy w funkcjonowaniu strony spowodowane siłą wyższą, niedozwolonym działaniem osób trzecich. .</div>
+	<div>Przeglądanie asortymentu strony  wymaga założenie Konta.</div>
+	<div>Ceny podane przez witrynę są podane w polskich złotych i są cenami brutto (uwzględniają podatek VAT).</div>
+	<br>
+	<h3>Zakładanie Konta w witrynie</h3>
+	<div>Aby założyć Konto w witrynie, należy wypełnić Formularz rejestracji. Niezbędne jest podanie następujących danych: nazwa, e-mail, płeć.</div>
+	<div>Założenie Konta w witrynie jest darmowe.</div>
+	<div>Następnie pojawi się ankieta powitalna, którą można opcjonalnie wypełnić;</div>
+	<div>Logowanie się na Konto odbywa się poprzez podanie e-maila i hasła ustanowionych w Formularzu rejestracji;</div>
+	<div>Klient ma możliwość w każdej chwili, bez podania przyczyny i bez ponoszenia z tego tytułu jakichkolwiek opłat usunąć Konto;</div>
+	<br>
+	<h3>Dane osobowe w witrynie internetowej</h3>
+	<div>Administratorem danych osobowych Klientów zbieranych za pośrednictwem strony internetowej jest Sprzedawca.</div>
+	<div>Dane osobowe Klientów zbierane przez administratora za pośrednictwem strony internetowego zbierane są w celu personalizacji działania strony, a jeżeli Klient wyrazi na to zgodę - także w celu marketingowym.</div>
+	<div>Klient ma prawo dostępu do treści swoich danych oraz ich poprawiania.</div>
+	<div>Podanie danych osobowych jest dobrowolne, aczkolwiek niepodanie wskazanych w Regulaminie danych osobowych niezbędnych do rejestracji uniemożliwi założenie konta.</div>
+	<br>
+	<h3>Postanowienia końcowe</h3>
+	<div>Umowy zawierane poprzez Sklep internetowy zawierane są w języku polskim.</div>
+	<div>Sprzedawca zastrzega sobie prawo do dokonywania zmian Regulaminu z ważnych przyczyn to jest: zmiany przepisów prawa, zmiany sposobów płatności i dostaw - w zakresie, w jakim te zmiany wpływają na realizację postanowień niniejszego Regulaminu. O każdej zmianie Sprzedawca poinformuje Klienta z co najmniej 7 dniowym wyprzedzeniem.</div>
+	<div>W sprawach nieuregulowanych w niniejszym Regulaminie mają zastosowanie powszechnie obowiązujące przepisy prawa polskiego, w szczególności: Kodeksu cywilnego; ustawy o świadczeniu usług drogą elektroniczną; ustawy o prawach konsumenta, ustawy o ochronie danych osobowych.</div>
+	<div>Klient ma prawo skorzystać z pozasądowych sposobów rozpatrywania reklamacji i dochodzenia roszczeń. W tym celu może złożyć skargę za pośrednictwem unijnej platformy internetowej ODR dostępnej pod adresem:<a href="http://ec.europa.eu/consumers/odr/" class=titlelink>http://ec.europa.eu/consumers/odr/.</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	
+	
+	
+{% endblock content %}

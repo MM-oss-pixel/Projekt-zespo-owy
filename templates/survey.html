@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+    <h1>{{ current_user.email }}</h1>
+
+<div class="ramka4">
+    <h2>Ankieta:</h2>
+	<form method="post">
+	
+		
+		<label for="sklep1">Biedronka</label>
+        <input type="checkbox" name="sklep1" value="Biedronka"></input>
+		<br>
+		<label for="sklep2">Lidl</label>
+        <input type="checkbox" name="sklep2" value="Lidl"></input>
+		<br>
+		<label for="sklep3">Carrefour</label>
+        <input type="checkbox" name="sklep3" value="Carrefour"></input>
+		<br>
+		<label for="sklep4">Tesco</label>
+        <input type="checkbox" name="sklep4" value="Tesco"></input>
+        <br>
+	
+		
+        <input type="submit" name="submit_button" value="Potwierdź">
+    </form>
+</div>
+{% endblock content %}
