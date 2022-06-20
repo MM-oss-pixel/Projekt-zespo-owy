@@ -481,6 +481,11 @@ def edit_account():
 def opinions():
     return render_template('opinions.html')
 
+@app.route('/regulamin', methods = ['GET','POST'])
+#@login_required
+def regulamin():
+    return render_template('regulamin.html')
+
 @app.route('/fav_products', methods = ['GET','POST'])
 #@login_required
 def fav_products():
@@ -659,6 +664,36 @@ def add_comment():
 
 # ---------------------------------------------                     end_of_user_panel
 
+@login_required
+@app.route("/survey", methods= ['GET','POST'])
+def survey():
+    user = User.query.filter(User.id == current_user.id).first()
+    if request.method == 'POST':
+        
+        lista = []
+        
+        lista.append(request.form.get('sklep1',False))
+        lista.append(request.form.get('sklep2',False))
+        lista.append(request.form.get('sklep3',False))
+        lista.append(request.form.get('sklep4',False))
+        
+        if "submit_button" in request.form:
+            
+            flash("Dziękujemy za wypełnienie ankiety")
+            
+            for sklep in lista:
+                if sklep is not False:
+                    record = shop_preferences(user.id,sklep)
+                    db.session.add(record)
+            
+            
+            db.session.commit()
+            return redirect('/home')
+        
+    return render_template('survey.html',)
+
+
+
 # ---------------------------------------------                     register_panel
 @app.route('/register', methods= ['GET','POST'])
 def register():
@@ -679,7 +714,8 @@ def register():
             db.session.add(user)
             db.session.commit()
             flash(f'Zarejestrowano pomyślnie!', 'success')
-            return redirect(url_for('login'))
+            login_user(user)
+            return redirect('/survey')
     return render_template('register.html', title='Rejestracja', form=form)
 
 
@@ -726,3 +762,4 @@ if __name__ == "__main__":
     # login_manager.init_app(app)
     db.create_all(app=app)
     app.run(host='0.0.0.0', debug=True)
+
